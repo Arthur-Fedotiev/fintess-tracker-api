@@ -1,6 +1,6 @@
 # FitnessTracker Backend API Specifications
 
-Create the backend for a fitness-tracker website. The frontend/UI is created in separate project. The html/css template has been created and can be used as a reference for functionality. All of the functionality below needs to be fully implmented in this project.
+Create the backend for a fitness-tracker website. The frontend/UI is created in separate project. It is cuurently using firebase and can be found at https://fitness-tracker-de06b.web.app/. This new API must completely mimic the firebase implementation, but implemented with Node.js, express, MongoDB, Mongoose tech stack.
 
 ### Exercises
 
