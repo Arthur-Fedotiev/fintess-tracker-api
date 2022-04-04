@@ -32,32 +32,6 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
   - Must have the role "admin"
   - Delete all translations for exercise
 
-<!-- ### Bootcamps
-
-- List all bootcamps in the database
-  - Pagination
-  - Select specific fields in result
-  - Limit number of results
-  - Filter by fields
-- Search bootcamps by radius from zipcode
-  - Use a geocoder to get exact location and coords from a single address field
-- Get single bootcamp
-- Create new bootcamp
-  - Authenticated users only
-  - Must have the role "publisher" or "admin"
-  - Only one bootcamp per publisher (admins can create more)
-  - Field validation via Mongoose
-- Upload a photo for bootcamp
-  - Owner only
-  - Photo will be uploaded to local filesystem
-- Update bootcamps
-  - Owner only
-  - Validation on update
-- Delete Bootcamp
-  - Owner only
-- Calculate the average cost of all courses for a bootcamp
-- Calculate the average rating from the reviews for a bootcamp -->
-
 ### ExercisesTranslations
 
 - Get translation for exercise
