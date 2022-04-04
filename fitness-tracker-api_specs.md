@@ -51,8 +51,7 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
 - Get single workout
 - Create new workout
   - Authenticated users only
-  - Only the owner or an admin can create a course for a bootcamp
-  - Publishers can create multiple courses
+  - Must have the role "admin"
 - Update workout
   - Authenticated users only
   - Must have the role "admin"
@@ -65,7 +64,7 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
 - Authentication will be ton using JWT/cookies
   - JWT and cookie should expire in 30 days
 - User registration
-  - Register as a "user" or "publisher"
+  - Register as a "user" or "admin"
   - Once registered, a token will be sent along with a cookie (token = xxx)
   - Passwords must be hashed
 - User login
