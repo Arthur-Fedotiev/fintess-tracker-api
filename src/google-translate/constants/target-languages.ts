@@ -1,1 +1,1 @@
-export const TARGET_LANGUAGES = ['en', 'ru', 'ukr', 'bg'] as const;
+export const LANGUAGE_CODES = ['en', 'ru', 'ukr', 'bg'] as const;

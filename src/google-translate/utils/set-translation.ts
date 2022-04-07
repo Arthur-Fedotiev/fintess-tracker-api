@@ -1,12 +1,15 @@
 import { TargetLanguages } from '../models/target-languages.type';
+import { TranslationDTO } from '../models/translatin-dto.interface';
 
 export const setTranslation =
   (targetLanguages: TargetLanguages) =>
-  <T extends Record<TargetLanguages[number], string | Record<string, string>>>(
-    translationsMap: T,
-    [translation]: unknown[],
+  (
+    translationsMap: TranslationDTO<string>,
+    translation: string,
     idx: number,
-  ): T => ({
-    ...translationsMap,
-    [targetLanguages[idx]]: translation,
-  });
+  ): TranslationDTO<string> => {
+    return {
+      ...translationsMap,
+      [targetLanguages[idx]]: translation,
+    };
+  };

@@ -1,3 +1,4 @@
-import { TARGET_LANGUAGES } from '../constants/target-languages';
+import { LANGUAGE_CODES } from '../constants/target-languages';
 
-export type TargetLanguages = typeof TARGET_LANGUAGES;
+export type TargetLanguages = typeof LANGUAGE_CODES;
+export type LanguageCodes = TargetLanguages[number];

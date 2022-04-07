@@ -1,41 +1,58 @@
 import { v2 } from '@google-cloud/translate';
 import { ENV_CONFIG } from '../env-config';
-import { TARGET_LANGUAGES } from './constants/target-languages';
-import { GoogleTranslateResponse } from './models/google-translate-response.interface';
-import { TargetLanguages } from './models/target-languages.type';
+import { LANGUAGE_CODES } from './constants/target-languages';
+import { LanguageCodes } from './models/target-languages.type';
 import { TranslationDTO } from './models/translatin-dto.interface';
 import { setTranslation } from './utils/set-translation';
 
-const translate = new v2.Translate({
+const translateService = new v2.Translate({
   credentials: ENV_CONFIG.googleTranslateCreds,
   projectId: ENV_CONFIG.googleTranslateCreds.project_id,
 });
 
 export const detectLanguage = async (text: string) => {
   try {
-    const response = await translate.detect(text);
+    const response = await translateService.detect(text);
     return response[0].language;
   } catch (error) {
-    console.log(`Error at detectLanguage --> ${error}`);
+    console.log(`Error at detectLanguage --> ${error}`.red);
     return 0;
   }
 };
 
-export const translateText = async <T extends string | Record<string, string>>(
-  text: T,
-  targetLanguages = TARGET_LANGUAGES,
-) => {
+export const translateText = async (
+  text: string,
+  targetLanguage: LanguageCodes,
+): Promise<string> => {
   try {
-    const translations: Promise<GoogleTranslateResponse<T>>[] = targetLanguages.map((language) =>
-      translate.translate(text as string, language),
-    );
-    const result: GoogleTranslateResponse<T>[] = await Promise.all(translations);
+    const [result] = await translateService.translate(text, targetLanguage);
 
-    const response: TranslationDTO<T> = result.reduce(setTranslation(targetLanguages), {} as TranslationDTO<T>);
+    return result;
+  } catch (error) {
+    console.log(`Error at translateText --> ${error}`.red);
+    return '';
+  }
+};
+
+export const translateToLangs = async (
+  text: string,
+  targetLanguages = LANGUAGE_CODES,
+): Promise<TranslationDTO<string> | null> => {
+  try {
+    const translations: Promise<string>[] = targetLanguages.map((language) =>
+      translateText(text, language),
+    );
+    const result = await Promise.all(translations);
+
+    const response: TranslationDTO<string> = result.reduce(
+      setTranslation(targetLanguages),
+      {} as TranslationDTO<string>,
+    );
 
     return response;
   } catch (error) {
-    console.log(`Error at translateText --> ${error}`);
-    return 0;
+    console.log(`Error at translateToLangs --> ${error}`.red);
+
+    return null;
   }
 };

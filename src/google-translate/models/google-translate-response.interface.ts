@@ -1,4 +1,7 @@
-export type GoogleTranslateResponse<T extends string | Record<string, string>> = [string, GoogleTranslateData<T>];
+export type GoogleTranslateResponse<T extends string | object> = [
+  string,
+  GoogleTranslateData<T>,
+];
 
 export interface GoogleTranslateData<T> {
   translations: Translation<T>[];

@@ -2,5 +2,5 @@
   "parser": "@typescript-eslint/parser",
   "extends": ["plugin:@typescript-eslint/recommended"],
   "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
-  "rules": { "no-console": "warn" }
+  "rules": { "no-console": "warn", "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }] }
 }
