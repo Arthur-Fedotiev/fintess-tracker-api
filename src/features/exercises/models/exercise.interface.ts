@@ -1,17 +1,9 @@
-import { Document } from 'mongoose';
 import {
   EquipmentEnum,
   ExerciseTypeEnum,
   MusclesEnum,
 } from '../constants/exercise.enums';
-import { TargetLanguages } from '../../../google-translate/models/target-languages.type';
-
-export type ExerciseDocument = Document &
-  ExerciseBaseData & {
-    [P in TargetLanguages[number]]: TranslatableData;
-  };
-
-export interface TranslatableData {
+export interface ExerciseTranslatableData {
   shortDescription: string;
   longDescription: string;
   instructions: string;
@@ -33,5 +25,5 @@ export interface ExerciseBaseData {
 }
 
 export interface ExerciseDTO extends ExerciseBaseData {
-  translatableData?: TranslatableData;
+  ExerciseTranslatableData?: ExerciseTranslatableData;
 }
