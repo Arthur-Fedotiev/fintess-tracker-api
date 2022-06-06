@@ -3,9 +3,12 @@ import { ENV_CONFIG } from './env-config';
 import { connectDB } from './db/connect-db';
 import { useLogger } from './shared/utils/use-logger';
 
-const colors = require('colors');
-import * as c from 'colors';
-import { ExerciseModel } from './features/exercises/Exercise.model';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const c = require('colors');
+import colors from 'colors';
+
+import { ExerciseModel } from './features/exercises/Exercise';
+import { i18nResults } from './i18n/middlewares/i18n-results';
 
 connectDB();
 
@@ -26,6 +29,36 @@ app.post('/exercises', async (req, res) => {
   });
 });
 
+app.get('/exercises/:id', i18nResults, async (req, res, next) => {
+  const id = req.params.id;
+
+  const exercise = await ExerciseModel.findById(id).select(
+    (req as any).i18nResults?.excludedLanguagesQuery ?? '',
+  );
+
+  exercise!.mergeTranslation((req as any).i18nResults?.language);
+
+  res.status(200).json({
+    success: true,
+    data: exercise,
+  });
+});
+
+app.get('/exercises', i18nResults, async (req, res) => {
+  const exercisesDocs = await ExerciseModel.find().select(
+    (req as any).i18nResults?.excludedLanguagesQuery ?? '',
+  );
+
+  exercisesDocs.forEach((exerciseDoc) =>
+    exerciseDoc.mergeTranslation((req as any).i18nResults?.language),
+  );
+
+  res.status(200).json({
+    success: true,
+    data: exercisesDocs,
+  });
+});
+
 const PORT = ENV_CONFIG.port || 8080;
 
 const server = app.listen(PORT, () =>
@@ -35,7 +68,7 @@ const server = app.listen(PORT, () =>
   ),
 );
 
-process.on('unhandledRejection', (err: Error, promise: Promise<unknown>) => {
+process.on('unhandledRejection', (err: Error) => {
   console.log(`Error: ${err.message}`.red);
 
   /**

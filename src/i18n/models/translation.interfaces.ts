@@ -1,4 +1,4 @@
-import { TranslatableData } from '../../features/exercises/models/exercise.interface';
+import { ExerciseTranslatableData } from '../../features/exercises/models/exercise.interface';
 import { LanguageCodes } from './target-languages.type';
 
 export type TranslatedData<T> = {
@@ -9,8 +9,8 @@ export type Translations<T> = {
   [langKey in LanguageCodes]: T;
 };
 
-export type TranslatedExercise = TranslatedData<TranslatableData>;
-export type ExerciseTranslations = Translations<TranslatableData>;
+export type TranslatedExercise = TranslatedData<ExerciseTranslatableData>;
+export type ExerciseTranslations = Translations<ExerciseTranslatableData>;
 export type extractedKey = keyof TranslatedExercise;
 
 export type ExtractedTranslation<
