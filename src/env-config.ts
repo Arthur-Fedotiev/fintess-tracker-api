@@ -11,5 +11,7 @@ export const ENV_CONFIG: EnvironmentConfig = {
   env: process.env.NODE_ENV,
   port: process.env.PORT,
   mongoURI: process.env.MONGO_URI,
-  googleTranslateCreds: JSON.parse(process.env.GOOGLE_TRANSLATE_CREDENTIALS),
+  googleTranslateCreds: JSON.parse(
+    process.env.GOOGLE_TRANSLATE_CREDENTIALS as unknown as string,
+  ),
 };
