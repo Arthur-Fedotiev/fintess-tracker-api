@@ -7,8 +7,8 @@ import { useLogger } from './shared/utils/use-logger';
 const c = require('colors');
 import colors from 'colors';
 
-import { ExerciseModel } from './features/exercises/Exercise';
-import { i18nResults } from './i18n/middlewares/i18n-results';
+import { ExerciseModel } from './frameworks/persistance/mongo/models/Exercise';
+import { i18nResults } from './frameworks/i18n/middlewares/i18n-results';
 
 connectDB();
 

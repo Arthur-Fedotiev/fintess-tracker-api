@@ -1,4 +1,4 @@
-import { ExerciseTranslatableData } from '../../features/exercises/models/exercise.interface';
+import { ExerciseTranslatableData } from '../../../entities/exercise/models/exercise-translatable-data.interface';
 import { TranslationDTO } from '../models/translatin-dto.interface';
 import { TranslatedData } from '../models/translation.interfaces';
 

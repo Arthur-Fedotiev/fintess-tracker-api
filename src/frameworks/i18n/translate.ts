@@ -1,5 +1,5 @@
 import { v2 } from '@google-cloud/translate';
-import { ENV_CONFIG } from '../env-config';
+import { ENV_CONFIG } from '../../env-config';
 import { LANGUAGE_CODES } from './constants/target-languages';
 import { LanguageCodes } from './models/target-languages.type';
 import { TranslationDTO } from './models/translatin-dto.interface';
@@ -16,6 +16,7 @@ export const detectLanguage = async (text: string) => {
     return response[0].language;
   } catch (error) {
     console.log(`Error at detectLanguage --> ${error}`.red);
+
     return 0;
   }
 };
@@ -26,6 +27,7 @@ export const translateText = async (
 ): Promise<string> => {
   try {
     const [result] = await translateService.translate(text, targetLanguage);
+    console.log(result);
 
     return result;
   } catch (error) {
@@ -39,9 +41,12 @@ export const translateToLangs = async (
   targetLanguages = LANGUAGE_CODES,
 ): Promise<TranslationDTO<string> | null> => {
   try {
+    console.log(text);
+
     const translations: Promise<string>[] = targetLanguages.map((language) =>
       translateText(text, language),
     );
+
     const result = await Promise.all(translations);
 
     const response: TranslationDTO<string> = result.reduce(

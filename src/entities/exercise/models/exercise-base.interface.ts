@@ -3,14 +3,8 @@ import {
   ExerciseTypeEnum,
   MusclesEnum,
 } from '../constants/exercise.enums';
-export interface ExerciseTranslatableData {
-  shortDescription: string;
-  longDescription: string;
-  instructions: string;
-  benefits: string;
-}
 
-export interface ExerciseBaseData {
+export interface ExerciseBase {
   name: string;
   exerciseType: ExerciseTypeEnum;
   targetMuscle: MusclesEnum;
@@ -22,8 +16,4 @@ export interface ExerciseBaseData {
   coverSecondaryUrl: string;
   muscleDiagramUrl: string;
   instructionVideo: string;
-}
-
-export interface ExerciseDTO extends ExerciseBaseData {
-  ExerciseTranslatableData?: ExerciseTranslatableData;
 }
