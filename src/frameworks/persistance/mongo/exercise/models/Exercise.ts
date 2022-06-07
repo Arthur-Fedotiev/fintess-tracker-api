@@ -3,12 +3,12 @@ import {
   ExerciseTypeEnum,
   MusclesEnum,
   EquipmentEnum,
-} from '../../../../entities/exercise/constants/exercise.enums';
-import { Exercise } from '../../../../entities/exercise/Exercise';
-import { ExercisePreSaveDTO } from '../../../../entities/exercise/models/dto/exercise-pre-save-DTO.type';
-import { ExerciseTranslatableData } from '../../../../entities/exercise/models/exercise-translatable-data.interface';
-import { DBModelNames } from '../../../../shared/enums/db-model-names.enum';
-import { getEnumValues } from '../../../../shared/utils/get-enum-values';
+} from '../../../../../entities/exercise/constants/exercise.enums';
+import { Exercise } from '../../../../../entities/exercise/ExerciseEntity';
+import { ExercisePreSaveDTO } from '../../../../../entities/exercise/models/dto/exercise-pre-save-DTO.type';
+import { ExerciseTranslatableData } from '../../../../../entities/exercise/models/exercise-translatable-data.interface';
+import { DBModelNames } from '../../../../../shared/enums/db-model-names.enum';
+import { getEnumValues } from '../../../../../shared/utils/get-enum-values';
 import { mergeTranslation } from '../middlewares/instance-methods';
 import { translateBeforeSave } from '../middlewares/translate-before-save';
 
@@ -93,6 +93,7 @@ const ExerciseSchema: Schema<Exercise> = new Schema({
   bg: getLocalizedDataDefinition(),
   ru: getLocalizedDataDefinition(),
   ukr: getLocalizedDataDefinition(),
+  ...(getLocalizedDataDefinition() as any),
 });
 ExerciseSchema.method({ mergeTranslation });
 ExerciseSchema.pre<ExercisePreSaveDTO>('save', translateBeforeSave);

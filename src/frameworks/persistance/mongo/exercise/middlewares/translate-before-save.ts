@@ -1,13 +1,15 @@
-import { ExercisePreSaveDTO } from '../../../../entities/exercise/models/dto/exercise-pre-save-DTO.type';
-import { ExerciseTranslatableData } from '../../../../entities/exercise/models/exercise-translatable-data.interface';
-import { TranslationDTO } from '../../../i18n/models/translatin-dto.interface';
+import {
+  ExercisePreSaveDTO,
+  ExerciseTranslatableData,
+} from '../../../../../entities/exercise';
+import { TranslationDTO } from '../../../../i18n/models/translatin-dto.interface';
 import {
   TranslatedData,
   Translations,
-} from '../../../i18n/models/translation.interfaces';
-import { translateToLangs } from '../../../i18n/translate';
-import { mapTranslatedValuesToKeys } from '../../../i18n/utils/map-translated-values-to-keys';
-import { mapTranslatedData } from '../../../i18n/utils/translation-mappers';
+} from '../../../../i18n/models/translation.interfaces';
+import { translateToLangs } from '../../../../i18n/translate';
+import { mapTranslatedValuesToKeys } from '../../../../i18n/utils/map-translated-values-to-keys';
+import { mapTranslatedData } from '../../../../i18n/utils/translation-mappers';
 
 export async function translateBeforeSave(
   this: ExercisePreSaveDTO,
