@@ -1,6 +1,6 @@
 import express from 'express';
 import { ENV_CONFIG } from './env-config';
-import { useLogger } from './shared/utils/use-logger';
+import { useLogger } from './app/shared/utils/use-logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const c = require('colors');

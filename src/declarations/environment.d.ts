@@ -1,5 +1,5 @@
-import { NodeEnvEnum } from '../shared/constants/node-env.enum';
-import { GoogleTranslateCredentials } from '../shared/models/google-translate-credentials.interface';
+import { NodeEnvEnum } from '../app/shared/constants/node-env.enum';
+import { GoogleTranslateCredentials } from '../app/shared/models/google-translate-credentials.interface';
 
 declare global {
   namespace NodeJS {

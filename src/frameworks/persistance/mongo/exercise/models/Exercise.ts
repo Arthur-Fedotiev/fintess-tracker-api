@@ -6,8 +6,8 @@ import {
 } from '../../../../../entities/exercise/constants/exercise.enums';
 import { Exercise } from '../../../../../entities/exercise/ExerciseEntity';
 import { ExerciseTranslatableData } from '../../../../../entities/exercise/models/exercise-translatable-data.interface';
-import { DBModelNames } from '../../../../../shared/enums/db-model-names.enum';
-import { getEnumValues } from '../../../../../shared/utils/get-enum-values';
+import { DBModelNames } from '../../../../../app/shared/enums/db-model-names.enum';
+import { getEnumValues } from '../../../../../app/shared/utils/get-enum-values';
 import { mergeTranslation } from '../middlewares/instance-methods';
 
 const getLocalizedDataDefinition =
