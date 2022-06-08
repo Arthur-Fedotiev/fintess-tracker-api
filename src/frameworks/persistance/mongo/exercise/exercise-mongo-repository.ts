@@ -3,7 +3,7 @@ import {
   ExerciseRequestDTO,
   ExerciseResponseDTO,
 } from '../../../../entities/exercise';
-import { I18nResults } from '../../../i18n/models/i18n-results.interface';
+import { I18nResults } from '../../../../app/contracts/i18n/models/i18n-results.interface';
 import { ExerciseModel } from './models/Exercise';
 
 export class ExerciseMongoRepository extends ExerciseRepository {

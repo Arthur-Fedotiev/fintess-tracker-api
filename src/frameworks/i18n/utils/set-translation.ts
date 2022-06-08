@@ -1,5 +1,5 @@
-import { TargetLanguages } from '../models/target-languages.type';
-import { TranslationDTO } from '../models/translatin-dto.interface';
+import { TargetLanguages } from '../../../app/contracts/i18n/models/target-languages.type';
+import { TranslationDTO } from '../../../app/contracts/i18n/models/translatin-dto.interface';
 
 export const setTranslation =
   (targetLanguages: TargetLanguages) =>

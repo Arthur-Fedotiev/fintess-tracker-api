@@ -1,6 +1,9 @@
-import { LANGUAGE_CODES } from '../constants/target-languages';
-import { LanguageCodes } from '../models/target-languages.type';
-import { TranslatedData, Translations } from '../models/translation.interfaces';
+import { LANGUAGE_CODES } from '../../../app/contracts/i18n/constants/target-languages';
+import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languages.type';
+import {
+  TranslatedData,
+  Translations,
+} from '../../../app/contracts/i18n/models/translation.interfaces';
 
 const extractDataForLangCode =
   <T>(langCode: LanguageCodes, data: TranslatedData<T>) =>

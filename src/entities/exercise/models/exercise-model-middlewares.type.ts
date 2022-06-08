@@ -1,4 +1,4 @@
-import { LanguageCodes } from '../../../frameworks/i18n/models/target-languages.type';
+import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languages.type';
 import { ExerciseDocument } from './exercise-document.type';
 
 export interface ExerciseModelMiddlewares {

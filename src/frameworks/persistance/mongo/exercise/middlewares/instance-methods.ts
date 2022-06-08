@@ -1,5 +1,5 @@
 import { ExerciseDocument } from '../../../../../entities/exercise';
-import { LanguageCodes } from '../../../../i18n/models/target-languages.type';
+import { LanguageCodes } from '../../../../../app/contracts/i18n/models/target-languages.type';
 
 export function mergeTranslation(
   this: ExerciseDocument,

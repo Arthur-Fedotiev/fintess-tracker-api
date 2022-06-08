@@ -1,4 +1,4 @@
-import { LanguageCodes } from '../../../../frameworks/i18n/models/target-languages.type';
+import { LanguageCodes } from '../../../../app/contracts/i18n/models/target-languages.type';
 import { Exercise } from '../../ExerciseEntity';
 import { ExerciseTranslatableData } from '../exercise-translatable-data.interface';
 

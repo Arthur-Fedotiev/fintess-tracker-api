@@ -5,18 +5,24 @@ import { ProjectDependencies } from '../dependencies/project-dependencies.interf
 import bind from 'bind-decorator';
 import { GetExerciseCommand } from '../app/use-cases/exercise/GetExercise';
 import { GetManyExercisesCommand } from '../app/use-cases/exercise/GetManyExerciss';
+import { TranslateService } from '../app/contracts/i18n/translate-service';
 
 export class ExerciseController {
   private static instance: ExerciseController;
 
-  private constructor(private readonly exerciseRepo: ExerciseRepository) {}
+  private constructor(
+    public readonly exerciseRepo: ExerciseRepository,
+    public readonly translateService: TranslateService,
+  ) {}
 
-  public static getInstance(
-    dependencies: ProjectDependencies,
-  ): ExerciseController {
+  public static getInstance({
+    DatabaseService,
+    TranslateService,
+  }: ProjectDependencies): ExerciseController {
     if (!ExerciseController.instance) {
       ExerciseController.instance = new ExerciseController(
-        dependencies.DatabaseService.exerciseRepository,
+        DatabaseService.exerciseRepository,
+        TranslateService,
       );
     }
 
@@ -33,6 +39,7 @@ export class ExerciseController {
       const { body } = req;
       const CreateExercise = CreateExerciseCommand.getInstance(
         this.exerciseRepo,
+        this.translateService,
       );
       const exercise = await CreateExercise.execute(body);
 

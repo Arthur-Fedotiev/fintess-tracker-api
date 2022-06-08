@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { LanguagesISO } from '../constants/lang-iso';
-import { LANGUAGE_CODES } from '../constants/target-languages';
-import { LanguageCodes } from '../models/target-languages.type';
+import { LanguagesISO } from '../../../app/contracts/i18n/constants/lang-iso';
+import { LANGUAGE_CODES } from '../../../app/contracts/i18n/constants/target-languages';
+import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languages.type';
 
 const toLanguageExcluded =
   (language: LanguageCodes): ((code: LanguageCodes) => string) =>
