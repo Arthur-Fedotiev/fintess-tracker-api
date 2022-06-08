@@ -1,6 +1,6 @@
-import { ExerciseRequestDTO } from '../../entities/exercise/models/dto/exercise-request-DTO.interface';
-import { ExerciseResponseDTO } from '../../entities/exercise/models/dto/exercise-response-DTO';
-import { I18nResults } from '../../frameworks/i18n/models/i18n-results.interface';
+import { ExerciseRequestDTO } from '../../../../entities/exercise/models/dto/exercise-request-DTO.interface';
+import { ExerciseResponseDTO } from '../../../../entities/exercise/models/dto/exercise-response-DTO';
+import { I18nResults } from '../../../../frameworks/i18n/models/i18n-results.interface';
 
 export abstract class ExerciseRepository {
   abstract getMany(i18nResults: I18nResults): Promise<ExerciseResponseDTO[]>;

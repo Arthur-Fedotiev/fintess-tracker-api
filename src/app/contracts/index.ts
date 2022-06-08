@@ -1,1 +1,1 @@
-export * from './exercise-repository.class';
+export * from './features/exercise/exercise-repository.class';

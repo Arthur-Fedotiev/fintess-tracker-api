@@ -1,4 +1,4 @@
-import { ExerciseRepository } from '../exercise-repository.class';
+import { ExerciseRepository } from '../features/exercise/exercise-repository.class';
 
 export abstract class DatabaseService {
   abstract exerciseRepository: ExerciseRepository;
