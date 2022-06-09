@@ -11,7 +11,7 @@ import { apiRouter } from './frameworks/web/routes';
 import { Server } from 'http';
 
 const app = express();
-const PORT = ENV_CONFIG.port || 8080;
+const PORT = ENV_CONFIG.port;
 
 projectDependencies.DatabaseService.connect()
   .then(() => {

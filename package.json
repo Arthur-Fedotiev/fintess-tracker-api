@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "preserve": "npm run build",
-    "serve": "concurrently \"tsc --watch\" \"nodemon -q dist/server.js\"",
+    "serve": "concurrently \"tsc --watch\" \"nodemon -q src/server.ts\"",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "format:check": "prettier --check .",
