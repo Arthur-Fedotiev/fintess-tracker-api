@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { EnvironmentConfig } from './app/shared/models/environment-config.interface';
+import { EnvironmentConfig } from './app/shared/models/environment/environment-config.interface';
 
 dotenv.config({
   debug: true,

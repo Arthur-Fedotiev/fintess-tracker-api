@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { LanguagesISO } from '../../../app/contracts/i18n/constants/lang-iso';
 import { LANGUAGE_CODES } from '../../../app/contracts/i18n/constants/target-languages';
 import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languages.type';
+import { QueryWithLanguage } from '../../../app/shared/models/api/query-with-language.interface';
 
 const toLanguageExcluded =
   (language: LanguageCodes): ((code: LanguageCodes) => string) =>
@@ -9,12 +10,7 @@ const toLanguageExcluded =
     code !== language ? '-' + code : '';
 
 export const i18nResults = async (
-  req: Request<
-    Record<string, unknown>,
-    unknown,
-    unknown,
-    { lang: LanguageCodes }
-  >,
+  req: Request<unknown, unknown, object, QueryWithLanguage>,
   _res: Response,
   next: NextFunction,
 ) => {
@@ -32,7 +28,10 @@ export const i18nResults = async (
 
   Object.assign(req, {
     query: reqQuery,
-    i18nResults,
+    body: {
+      i18nResults,
+      ...(req.body ?? {}),
+    },
   });
 
   next();

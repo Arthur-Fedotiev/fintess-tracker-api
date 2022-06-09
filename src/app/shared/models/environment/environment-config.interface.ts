@@ -1,4 +1,4 @@
-import { NodeEnvEnum } from '../constants/node-env.enum';
+import { NodeEnvEnum } from '../../constants/node-env.enum';
 import { GoogleTranslateCredentials } from './google-translate-credentials.interface';
 
 export interface EnvironmentConfig {
