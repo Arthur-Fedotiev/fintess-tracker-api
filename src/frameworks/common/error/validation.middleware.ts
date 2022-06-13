@@ -1,6 +1,7 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { HttpException } from '../../../app/shared/models/error/http-exception';
 
 const extractErrorMessages = (errors: ValidationError[]): string[] => {
   const messages = errors.map((error: ValidationError) => {
@@ -12,15 +13,13 @@ const extractErrorMessages = (errors: ValidationError[]): string[] => {
     return [...parentMessage, ...childrenMessage];
   });
 
-  console.log('messages'.red, messages);
-
   return messages.flat();
 };
 
 export default function validationMiddleware<T extends object>(
   type: ClassConstructor<T>,
   skipMissingProperties = false,
-): (req: any, _res: Response, next: NextFunction) => Promise<void> {
+): (req: Request, _res: Response, next: NextFunction) => Promise<void> {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const { body } = req;
     const errors = await validate(plainToInstance(type, body), {
@@ -30,7 +29,7 @@ export default function validationMiddleware<T extends object>(
     if (errors.length) {
       const message = extractErrorMessages(errors);
 
-      next(new Error(JSON.stringify(message)));
+      next(new HttpException(message, 400));
     }
 
     next();

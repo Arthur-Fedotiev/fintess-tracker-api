@@ -2,7 +2,7 @@ import express from 'express';
 import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exercise-dto';
 import { ExerciseController } from '../../../controllers/exercise/exercise.controller';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
-import validationMiddleware from '../../common/validation.middleware';
+import validationMiddleware from '../../common/error/validation.middleware';
 import { i18nResults } from '../../i18n/middlewares/i18n-results';
 
 export const exerciseRouter = (dependencies: ProjectDependencies) => {
