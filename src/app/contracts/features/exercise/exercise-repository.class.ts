@@ -11,4 +11,5 @@ export abstract class ExerciseRepository {
   abstract createOne(
     dto: ExerciseRequestDTO,
   ): Promise<ExerciseResponseDTO | null>;
+  abstract deleteOne(id: number | string): Promise<ExerciseResponseDTO | null>;
 }

@@ -31,7 +31,7 @@ export class ExerciseMongoRepository extends ExerciseRepository {
     );
 
     if (!exercise) {
-      throw new Error('Not found exercise');
+      return null;
     }
 
     exercise.mergeTranslation(language);
@@ -43,5 +43,9 @@ export class ExerciseMongoRepository extends ExerciseRepository {
     dto: ExerciseRequestDTO,
   ): Promise<ExerciseResponseDTO | null> {
     return await ExerciseModel.create(dto);
+  }
+
+  async deleteOne(id: string | number): Promise<ExerciseResponseDTO | null> {
+    return ExerciseModel.findByIdAndRemove(id, { select: 'id' });
   }
 }
