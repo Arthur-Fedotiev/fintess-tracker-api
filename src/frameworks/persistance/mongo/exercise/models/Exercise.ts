@@ -19,19 +19,19 @@ const getLocalizedDataDefinition =
     },
     shortDescription: {
       type: String,
-      maxlength: [1000, 'Description can not be more than 500 characters'],
+      maxlength: [500, 'Description can not be more than 500 characters'],
     },
     longDescription: {
       type: String,
-      maxlength: [2000, 'Description can not be more than 500 characters'],
+      maxlength: [1000, 'Description can not be more than 1000 characters'],
     },
     instructions: {
       type: String,
-      maxlength: [2000, 'Instruction can not be more than 1000 characters'],
+      maxlength: [1000, 'Instruction can not be more than 1000 characters'],
     },
     benefits: {
       type: String,
-      maxlength: [2000, 'Benefits can not be more than 1000 characters'],
+      maxlength: [1000, 'Benefits can not be more than 1000 characters'],
     },
   });
 

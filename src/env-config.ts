@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { NodeEnvEnum } from './app/shared/constants/node-env.enum';
 import { EnvironmentConfig } from './app/shared/models/environment/environment-config.interface';
 
 dotenv.config({
@@ -8,8 +9,8 @@ dotenv.config({
 });
 
 export const ENV_CONFIG: EnvironmentConfig = {
-  env: process.env.NODE_ENV,
-  port: process.env.PORT,
+  env: process.env.NODE_ENV as NodeEnvEnum,
+  port: process.env.PORT ?? 8080,
   mongoURI: process.env.MONGO_URI,
   googleTranslateCreds: JSON.parse(
     process.env.GOOGLE_TRANSLATE_CREDENTIALS as unknown as string,
