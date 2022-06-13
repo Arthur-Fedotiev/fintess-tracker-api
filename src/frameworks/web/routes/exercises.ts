@@ -15,7 +15,10 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
     .get(i18nResults, controller.getExercises)
     .post(validationMiddleware(CreateExerciseDTO), controller.createExercise);
 
-  router.route('/:id').get(i18nResults, controller.getExerciseById);
+  router
+    .route('/:id')
+    .get(i18nResults, controller.getExerciseById)
+    .delete(controller.deleteOne);
 
   return router;
 };

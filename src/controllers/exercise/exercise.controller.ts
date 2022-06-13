@@ -18,6 +18,8 @@ import { QueryWithLanguage } from '../../app/shared/models/api/query-with-langua
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
 import { AsyncHandler } from '../../app/shared/decorators/async-handler';
 import { GetManyExercisesCommand } from '../../app/use-cases/exercise/GetManyExerciss';
+import { DeleteExerciseCommand } from '../../app/use-cases/exercise/DeleteExercise';
+import { NotFoundException } from '../../app/shared/models/error/not-found';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -82,6 +84,8 @@ export class ExerciseController {
 
     const exercise = await GetExercise.execute(id, i18nResults);
 
+    if (!exercise) throw new NotFoundException();
+
     res.status(200).json(new SuccessfulResponse(exercise));
   }
 
@@ -103,5 +107,21 @@ export class ExerciseController {
     const exercises = await GetManyExercises.execute(req.body.i18nResults);
 
     res.status(200).json(new SuccessfulResponse(exercises));
+  }
+
+  @bind
+  @AsyncHandler()
+  public async deleteOne(
+    req: Request<BaseParams, APIResponse<BaseParams>, Empty, QueryWithLanguage>,
+    res: Response,
+  ): Promise<void> {
+    const {
+      params: { id },
+    } = req;
+    const DeleteExercise = DeleteExerciseCommand.getInstance(this.exerciseRepo);
+
+    await DeleteExercise.execute(id);
+
+    res.status(200).json(new SuccessfulResponse({ id }));
   }
 }
