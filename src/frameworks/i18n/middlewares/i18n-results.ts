@@ -14,25 +14,28 @@ export const i18nResults = async (
   _res: Response,
   next: NextFunction,
 ) => {
-  const { lang, ...reqQuery } = req.query;
-  const language = lang ?? LanguagesISO.ENGLISH;
+  try {
+    const { lang, ...reqQuery } = req.query ?? {};
+    const language = lang ?? LanguagesISO.ENGLISH;
 
-  const excludedLanguagesQuery = LANGUAGE_CODES.map(
-    toLanguageExcluded(language),
-  ).join(' ');
+    const excludedLanguagesQuery = LANGUAGE_CODES.map(
+      toLanguageExcluded(language),
+    ).join(' ');
 
-  const i18nResults = {
-    excludedLanguagesQuery,
-    language,
-  };
+    const i18nResults = {
+      excludedLanguagesQuery,
+      language,
+    };
 
-  Object.assign(req, {
-    query: reqQuery,
-    body: {
-      i18nResults,
-      ...(req.body ?? {}),
-    },
-  });
-
-  next();
+    Object.assign(req, {
+      query: reqQuery,
+      body: {
+        i18nResults,
+        ...(req.body ?? {}),
+      },
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
 };

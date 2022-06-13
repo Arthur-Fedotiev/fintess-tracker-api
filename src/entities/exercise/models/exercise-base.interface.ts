@@ -5,7 +5,6 @@ import {
 } from '../constants/exercise.enums';
 
 export interface ExerciseBase {
-  name: string;
   exerciseType: ExerciseTypeEnum;
   targetMuscle: MusclesEnum;
   equipment: EquipmentEnum;

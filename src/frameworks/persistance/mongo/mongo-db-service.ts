@@ -13,7 +13,7 @@ export class MongoDBService extends DatabaseService {
   }
 
   async connect(): Promise<void> {
-    const connection = await mongoose.connect(ENV_CONFIG.mongoURI);
+    const connection = await mongoose.connect(ENV_CONFIG.mongoURI!);
 
     console.log(
       `MongoDB connected: ${connection.connection.host}`.cyan.underline.bold,

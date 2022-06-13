@@ -1,6 +1,8 @@
 import express from 'express';
-import { ExerciseController } from '../../../controllers/exercise.controller';
+import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exercise-dto';
+import { ExerciseController } from '../../../controllers/exercise/exercise.controller';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
+import validationMiddleware from '../../common/error/validation.middleware';
 import { i18nResults } from '../../i18n/middlewares/i18n-results';
 
 export const exerciseRouter = (dependencies: ProjectDependencies) => {
@@ -11,7 +13,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
   router
     .route('/')
     .get(i18nResults, controller.getExercises)
-    .post(controller.createExercise);
+    .post(validationMiddleware(CreateExerciseDTO), controller.createExercise);
 
   router.route('/:id').get(i18nResults, controller.getExerciseById);
 
