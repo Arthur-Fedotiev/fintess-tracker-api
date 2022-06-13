@@ -16,7 +16,10 @@ export const i18nResults = async (
 ) => {
   try {
     const { lang, ...reqQuery } = req.query ?? {};
-    const language = lang ?? LanguagesISO.ENGLISH;
+    const language =
+      lang && Object.keys(LanguagesISO).includes(lang)
+        ? lang
+        : LanguagesISO.ENGLISH;
 
     const excludedLanguagesQuery = LANGUAGE_CODES.map(
       toLanguageExcluded(language),
