@@ -17,10 +17,9 @@ export class GoogleTranslateService extends TranslateService {
     super();
   }
 
-  public async translate<T extends string | object>(untranslatedData: {
-    translatableData: T;
-  }): Promise<Translations<string | object>> {
-    const { translatableData } = untranslatedData;
+  public async translate<T extends string | object>(
+    translatableData: T,
+  ): Promise<Translations<string | object>> {
     const translatableEntries: [string, string][] =
       Object.entries(translatableData);
 

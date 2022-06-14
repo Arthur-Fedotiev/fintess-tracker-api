@@ -24,7 +24,7 @@ export class GetExerciseCommand
 
   public async execute(
     id: number | string,
-    i18nResults: I18nResults,
+    i18nResults?: I18nResults,
   ): Promise<ExerciseResponseDTO | null> {
     return this.exerciseRepository.getOneById(id, i18nResults);
   }

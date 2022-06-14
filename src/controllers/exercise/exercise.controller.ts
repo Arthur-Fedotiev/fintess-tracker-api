@@ -7,10 +7,7 @@ import { GetExerciseCommand } from '../../app/use-cases/exercise/GetExercise';
 import { TranslateService } from '../../app/contracts/i18n/translate-service';
 import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
-import {
-  ExercisePreSaveDTO,
-  ExerciseResponseDTO,
-} from '../../entities/exercise';
+import { ExerciseResponseDTO } from '../../entities/exercise';
 import { I18nBody } from '../../app/shared/models/api/i18n-extended-request.interface';
 import { Pagination } from '../../app/shared/models/api/pagination.interface';
 import { BaseParams } from '../../app/shared/models/api/base-params.interface';
@@ -20,6 +17,9 @@ import { AsyncHandler } from '../../app/shared/decorators/async-handler';
 import { GetManyExercisesCommand } from '../../app/use-cases/exercise/GetManyExerciss';
 import { DeleteExerciseCommand } from '../../app/use-cases/exercise/DeleteExercise';
 import { NotFoundException } from '../../app/shared/models/error/not-found';
+import { CreateExerciseDTO } from './dto/create-exercise-dto';
+import { UpdateExerciseCommand } from '../../app/use-cases/exercise/UpdateExercise';
+import { DeepPartial } from '../../app/shared/models/common/deep-partial.type';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -49,7 +49,7 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO>,
-      ExercisePreSaveDTO & I18nBody,
+      CreateExerciseDTO & I18nBody,
       QueryWithLanguage
     >,
     res: Response,
@@ -61,6 +61,31 @@ export class ExerciseController {
       this.translateService,
     );
     const exercise = await CreateExercise.execute(body);
+
+    res.status(200).json(new SuccessfulResponse(exercise));
+  }
+
+  @bind
+  @AsyncHandler()
+  public async updateOneExercise(
+    req: Request<
+      BaseParams,
+      APIResponse<Partial<ExerciseResponseDTO>>,
+      DeepPartial<CreateExerciseDTO>,
+      QueryWithLanguage
+    >,
+    res: Response,
+  ): Promise<void> {
+    const {
+      body,
+      params: { id },
+    } = req;
+
+    const UpdateExercise = UpdateExerciseCommand.getInstance(
+      this.exerciseRepo,
+      this.translateService,
+    );
+    const exercise = await UpdateExercise.execute(id, body);
 
     res.status(200).json(new SuccessfulResponse(exercise));
   }

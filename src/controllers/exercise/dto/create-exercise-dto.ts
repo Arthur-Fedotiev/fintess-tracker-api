@@ -94,7 +94,6 @@ export class CreateExerciseDTO implements Required<ExerciseRequestDTO> {
   @IsUrl()
   instructionVideo!: string;
 
-  @IsDefined()
   @IsNotEmptyObject()
   @IsObject()
   @ValidateNested()

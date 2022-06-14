@@ -1,13 +1,32 @@
 import { NextFunction, Request, Response } from 'express';
 import { LanguagesISO } from '../../../app/contracts/i18n/constants/lang-iso';
-import { LANGUAGE_CODES } from '../../../app/contracts/i18n/constants/target-languages';
+import {
+  LANGUAGE_CODES,
+  LANGUAGE_CODES_SET,
+} from '../../../app/contracts/i18n/constants/target-languages';
 import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languages.type';
 import { QueryWithLanguage } from '../../../app/shared/models/api/query-with-language.interface';
 
 const toLanguageExcluded =
-  (language: LanguageCodes): ((code: LanguageCodes) => string) =>
-  (code: LanguageCodes): string =>
-    code !== language ? '-' + code : '';
+  (allowedLanguages: Set<LanguageCodes>): ((lang: LanguageCodes) => string) =>
+  (lang: LanguageCodes): string =>
+    allowedLanguages.has(lang) ? '' : `-${lang}`;
+
+const getFilteredLanguages = (languagesQuery?: string): Set<LanguageCodes> => {
+  const fallbackLAnguageSet = new Set([LanguagesISO.DEFAULT as LanguageCodes]);
+
+  if (!languagesQuery) return fallbackLAnguageSet;
+
+  const languages = languagesQuery
+    .split(',')
+    .filter((lang: string): lang is LanguageCodes =>
+      LANGUAGE_CODES_SET.has(lang as LanguageCodes),
+    );
+
+  if (!languages.length) return fallbackLAnguageSet;
+
+  return new Set(languages);
+};
 
 export const i18nResults = async (
   req: Request<unknown, unknown, object, QueryWithLanguage>,
@@ -16,18 +35,16 @@ export const i18nResults = async (
 ) => {
   try {
     const { lang, ...reqQuery } = req.query ?? {};
-    const language =
-      lang && Object.keys(LanguagesISO).includes(lang)
-        ? lang
-        : LanguagesISO.ENGLISH;
+    const languagesSet = getFilteredLanguages(lang); // Set{'en', 'bg'}
+    const languages = [...languagesSet]; //    ['en', 'bg']
 
     const excludedLanguagesQuery = LANGUAGE_CODES.map(
-      toLanguageExcluded(language),
+      toLanguageExcluded(languagesSet),
     ).join(' ');
 
     const i18nResults = {
       excludedLanguagesQuery,
-      language,
+      languages,
     };
 
     Object.assign(req, {

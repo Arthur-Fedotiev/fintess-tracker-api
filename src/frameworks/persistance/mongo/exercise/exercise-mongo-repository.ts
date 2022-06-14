@@ -5,18 +5,17 @@ import {
 } from '../../../../entities/exercise';
 import { I18nResults } from '../../../../app/contracts/i18n/models/i18n-results.interface';
 import { ExerciseModel } from './models/Exercise';
+import { i18nDefaultConfig } from '../../../../app/contracts/i18n/constants/i18n-default-config';
+import { DeepPartial } from '../../../../app/shared/models/common/deep-partial.type';
 
 export class ExerciseMongoRepository extends ExerciseRepository {
-  async getMany({
-    excludedLanguagesQuery,
-    language,
-  }: I18nResults): Promise<ExerciseResponseDTO[]> {
-    const exercisesDocs = await ExerciseModel.find().select(
-      excludedLanguagesQuery ?? '',
-    );
+  async getMany(
+    i18nResults: I18nResults = i18nDefaultConfig,
+  ): Promise<ExerciseResponseDTO[]> {
+    const { excludedLanguagesQuery } = i18nResults;
 
-    exercisesDocs.forEach((exerciseDoc) =>
-      exerciseDoc.mergeTranslation(language),
+    const exercisesDocs = await ExerciseModel.find().select(
+      excludedLanguagesQuery,
     );
 
     return exercisesDocs;
@@ -24,19 +23,15 @@ export class ExerciseMongoRepository extends ExerciseRepository {
 
   async getOneById(
     id: string | number,
-    { excludedLanguagesQuery, language }: I18nResults,
+    i18nResults: I18nResults = i18nDefaultConfig,
   ): Promise<ExerciseResponseDTO | null> {
+    const { excludedLanguagesQuery } = i18nResults;
+
     const exercise = await ExerciseModel.findById(id).select(
-      excludedLanguagesQuery ?? '',
+      excludedLanguagesQuery,
     );
 
-    if (!exercise) {
-      return null;
-    }
-
-    exercise.mergeTranslation(language);
-
-    return exercise;
+    return exercise ?? null;
   }
 
   async createOne(
@@ -47,5 +42,14 @@ export class ExerciseMongoRepository extends ExerciseRepository {
 
   async deleteOne(id: string | number): Promise<ExerciseResponseDTO | null> {
     return ExerciseModel.findByIdAndRemove(id, { select: 'id' });
+  }
+
+  async updateOne(id: string | number, dto: DeepPartial<ExerciseRequestDTO>) {
+    const exercise = await ExerciseModel.findByIdAndUpdate(id, dto, {
+      new: true,
+      runValidators: true,
+    });
+
+    return exercise;
   }
 }

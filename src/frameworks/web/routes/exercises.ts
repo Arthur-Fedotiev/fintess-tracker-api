@@ -18,6 +18,10 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
   router
     .route('/:id')
     .get(i18nResults, controller.getExerciseById)
+    .patch(
+      validationMiddleware(CreateExerciseDTO, true),
+      controller.updateOneExercise,
+    )
     .delete(controller.deleteOne);
 
   return router;
