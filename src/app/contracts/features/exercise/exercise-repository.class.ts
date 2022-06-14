@@ -1,5 +1,6 @@
 import { ExerciseRequestDTO } from '../../../../entities/exercise/models/dto/exercise-request-DTO.interface';
 import { ExerciseResponseDTO } from '../../../../entities/exercise/models/dto/exercise-response-DTO';
+import { DeepPartial } from '../../../shared/models/common/deep-partial.type';
 import { I18nResults } from '../../i18n/models/i18n-results.interface';
 
 export abstract class ExerciseRepository {
@@ -12,4 +13,8 @@ export abstract class ExerciseRepository {
     dto: ExerciseRequestDTO,
   ): Promise<ExerciseResponseDTO | null>;
   abstract deleteOne(id: number | string): Promise<ExerciseResponseDTO | null>;
+  abstract updateOne(
+    id: number | string,
+    dto: DeepPartial<ExerciseRequestDTO>,
+  ): Promise<ExerciseResponseDTO | null>;
 }

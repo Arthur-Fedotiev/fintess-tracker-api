@@ -6,6 +6,7 @@ import {
 import { I18nResults } from '../../../../app/contracts/i18n/models/i18n-results.interface';
 import { ExerciseModel } from './models/Exercise';
 import { i18nDefaultConfig } from '../../../../app/contracts/i18n/constants/i18n-default-config';
+import { DeepPartial } from '../../../../app/shared/models/common/deep-partial.type';
 
 export class ExerciseMongoRepository extends ExerciseRepository {
   async getMany(
@@ -41,5 +42,14 @@ export class ExerciseMongoRepository extends ExerciseRepository {
 
   async deleteOne(id: string | number): Promise<ExerciseResponseDTO | null> {
     return ExerciseModel.findByIdAndRemove(id, { select: 'id' });
+  }
+
+  async updateOne(id: string | number, dto: DeepPartial<ExerciseRequestDTO>) {
+    const exercise = await ExerciseModel.findByIdAndUpdate(id, dto, {
+      new: true,
+      runValidators: true,
+    });
+
+    return exercise;
   }
 }
