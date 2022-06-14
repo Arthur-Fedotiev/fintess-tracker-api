@@ -20,6 +20,7 @@ import { AsyncHandler } from '../../app/shared/decorators/async-handler';
 import { GetManyExercisesCommand } from '../../app/use-cases/exercise/GetManyExerciss';
 import { DeleteExerciseCommand } from '../../app/use-cases/exercise/DeleteExercise';
 import { NotFoundException } from '../../app/shared/models/error/not-found';
+import { CreateExerciseDTO } from './dto/create-exercise-dto';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -49,6 +50,28 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO>,
+      CreateExerciseDTO & I18nBody,
+      QueryWithLanguage
+    >,
+    res: Response,
+  ): Promise<void> {
+    const { body } = req;
+
+    const CreateExercise = CreateExerciseCommand.getInstance(
+      this.exerciseRepo,
+      this.translateService,
+    );
+    const exercise = await CreateExercise.execute(body);
+
+    res.status(200).json(new SuccessfulResponse(exercise));
+  }
+
+  @bind
+  @AsyncHandler()
+  public async updateOneExercise(
+    req: Request<
+      Empty,
+      APIResponse<Partial<ExerciseResponseDTO>>,
       ExercisePreSaveDTO & I18nBody,
       QueryWithLanguage
     >,
