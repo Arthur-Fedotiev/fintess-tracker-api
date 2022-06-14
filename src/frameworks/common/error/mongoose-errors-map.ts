@@ -22,4 +22,8 @@ export const MONGOOSE_ERRORS_MAP = new Map<
   .set(
     MongooseErrorCodesEnum[11000],
     () => new BadRequestException('Duplicate field value entered'),
+  )
+  .set(
+    MongooseErrorCodesEnum[31254],
+    (err: CustomMongooseError) => new BadRequestException(err.message),
   );
