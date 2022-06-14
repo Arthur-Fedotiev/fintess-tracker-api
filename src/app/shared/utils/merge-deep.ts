@@ -15,7 +15,7 @@ export const mergeDeep = (
 
     if (!(targetObjectValue && mergedObjectValue)) return;
 
-    typeof targetObjectValue === 'object'
+    isObject(targetObjectValue)
       ? mergeDeep(targetObjectValue, mergedObjectValue)
       : Object.assign(targetObject, {
           [mergedObjectKey]: mergedObjectValue,
