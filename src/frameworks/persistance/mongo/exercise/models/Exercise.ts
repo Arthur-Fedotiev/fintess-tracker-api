@@ -8,7 +8,7 @@ import { Exercise } from '../../../../../entities/exercise/ExerciseEntity';
 import { ExerciseTranslatableData } from '../../../../../entities/exercise/models/exercise-translatable-data.interface';
 import { DBModelNames } from '../../../../../app/shared/enums/db-model-names.enum';
 import { getEnumValues } from '../../../../../app/shared/utils/get-enum-values';
-import { mergeTranslation } from '../middlewares/instance-methods';
+import { mergeTranslations } from '../middlewares/instance-methods';
 
 const getLocalizedDataDefinition =
   (): SchemaDefinitionProperty<ExerciseTranslatableData> => ({
@@ -93,7 +93,12 @@ const ExerciseSchema: Schema<Exercise> = new Schema({
   ukr: getLocalizedDataDefinition(),
   ...(getLocalizedDataDefinition() as any),
 });
-ExerciseSchema.method({ mergeTranslation });
+
+/**
+ * Deprecated.
+ * TODO: remove in a future
+ */
+ExerciseSchema.method({ mergeTranslations });
 
 export const ExerciseModel = mongoose.model(
   DBModelNames.Exercise,

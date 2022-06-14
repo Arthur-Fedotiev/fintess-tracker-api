@@ -6,7 +6,7 @@ export abstract class ExerciseRepository {
   abstract getMany(i18nResults: I18nResults): Promise<ExerciseResponseDTO[]>;
   abstract getOneById(
     id: number | string,
-    i18nResults: I18nResults,
+    i18nResults?: I18nResults,
   ): Promise<ExerciseResponseDTO | null>;
   abstract createOne(
     dto: ExerciseRequestDTO,
