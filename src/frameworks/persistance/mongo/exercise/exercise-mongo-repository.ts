@@ -1,47 +1,58 @@
 import { ExerciseRepository } from '../../../../app/contracts';
 import {
+  Exercise,
   ExerciseRequestDTO,
   ExerciseResponseDTO,
 } from '../../../../entities/exercise';
-import { I18nResults } from '../../../../app/contracts/i18n/models/i18n-results.interface';
 import { ExerciseModel } from './models/Exercise';
+import { DeepPartial } from '../../../../app/shared/models/common/deep-partial.type';
+import { AdvancedResultsMongooseService } from '../advanced-results-mongoose.service';
+import { PaginatedResponse } from '../../../../app/shared/models/api/pagination/paginated-response.interface';
+import { RequestQuery } from '../../../../app/shared/models/api/request-query.type';
+import { MongooseQueryBuilder } from './utils/mongoose-query-builder';
 
 export class ExerciseMongoRepository extends ExerciseRepository {
-  async getMany({
-    excludedLanguagesQuery,
-    language,
-  }: I18nResults): Promise<ExerciseResponseDTO[]> {
-    const exercisesDocs = await ExerciseModel.find().select(
-      excludedLanguagesQuery ?? '',
-    );
-
-    exercisesDocs.forEach((exerciseDoc) =>
-      exerciseDoc.mergeTranslation(language),
-    );
-
-    return exercisesDocs;
+  constructor(
+    private readonly advancedResultsService: AdvancedResultsMongooseService,
+  ) {
+    super();
+  }
+  async getMany(
+    query: RequestQuery,
+  ): Promise<PaginatedResponse<ExerciseResponseDTO[]>> {
+    return this.advancedResultsService.getAdvancedResults<
+      Exercise,
+      ExerciseResponseDTO[],
+      Exercise
+    >(ExerciseModel, query, { paginationInfo: true });
   }
 
   async getOneById(
     id: string | number,
-    { excludedLanguagesQuery, language }: I18nResults,
+    query?: RequestQuery,
   ): Promise<ExerciseResponseDTO | null> {
-    const exercise = await ExerciseModel.findById(id).select(
-      excludedLanguagesQuery ?? '',
-    );
+    const selectQuery = MongooseQueryBuilder.toSelectFields(query?.select);
+    const exercise = await ExerciseModel.findById(id).select(selectQuery);
 
-    if (!exercise) {
-      throw new Error('Not found exercise');
-    }
-
-    exercise.mergeTranslation(language);
-
-    return exercise;
+    return exercise ?? null;
   }
 
   async createOne(
     dto: ExerciseRequestDTO,
   ): Promise<ExerciseResponseDTO | null> {
     return await ExerciseModel.create(dto);
+  }
+
+  async deleteOne(id: string | number): Promise<ExerciseResponseDTO | null> {
+    return ExerciseModel.findByIdAndRemove(id, { select: 'id' });
+  }
+
+  async updateOne(id: string | number, dto: DeepPartial<ExerciseRequestDTO>) {
+    const exercise = await ExerciseModel.findByIdAndUpdate(id, dto, {
+      new: true,
+      runValidators: true,
+    });
+
+    return exercise;
   }
 }

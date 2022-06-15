@@ -1,7 +1,5 @@
-import {
-  ExercisePreSaveDTO,
-  ExerciseResponseDTO,
-} from '../../../entities/exercise';
+import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exercise-dto';
+import { ExerciseResponseDTO } from '../../../entities/exercise';
 import { ExerciseRepository } from '../../contracts';
 import { TranslateService } from '../../contracts/i18n/translate-service';
 import { UseCaseExecutor } from '../common/use-case.interface';
@@ -31,9 +29,11 @@ export class CreateExerciseCommand
   }
 
   public async execute(
-    dto: ExercisePreSaveDTO,
+    dto: CreateExerciseDTO,
   ): Promise<ExerciseResponseDTO | null> {
-    const translateExercise = await this.translateService.translate(dto);
+    const translateExercise = await this.translateService.translate(
+      dto.translatableData,
+    );
     const dtoWithTranslation = Object.assign(dto, translateExercise, {
       translatableData: undefined,
     });

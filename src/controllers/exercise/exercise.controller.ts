@@ -7,17 +7,18 @@ import { GetExerciseCommand } from '../../app/use-cases/exercise/GetExercise';
 import { TranslateService } from '../../app/contracts/i18n/translate-service';
 import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
-import {
-  ExercisePreSaveDTO,
-  ExerciseResponseDTO,
-} from '../../entities/exercise';
-import { I18nBody } from '../../app/shared/models/api/i18n-extended-request.interface';
-import { Pagination } from '../../app/shared/models/api/pagination.interface';
+import { ExerciseResponseDTO } from '../../entities/exercise';
 import { BaseParams } from '../../app/shared/models/api/base-params.interface';
 import { QueryWithLanguage } from '../../app/shared/models/api/query-with-language.interface';
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
 import { AsyncHandler } from '../../app/shared/decorators/async-handler';
 import { GetManyExercisesCommand } from '../../app/use-cases/exercise/GetManyExerciss';
+import { DeleteExerciseCommand } from '../../app/use-cases/exercise/DeleteExercise';
+import { NotFoundException } from '../../app/shared/models/error/not-found';
+import { CreateExerciseDTO } from './dto/create-exercise-dto';
+import { UpdateExerciseCommand } from '../../app/use-cases/exercise/UpdateExercise';
+import { DeepPartial } from '../../app/shared/models/common/deep-partial.type';
+import { RequestQuery } from '../../app/shared/models/api/request-query.type';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -47,7 +48,7 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO>,
-      ExercisePreSaveDTO & I18nBody,
+      CreateExerciseDTO,
       QueryWithLanguage
     >,
     res: Response,
@@ -65,22 +66,48 @@ export class ExerciseController {
 
   @bind
   @AsyncHandler()
+  public async updateOneExercise(
+    req: Request<
+      BaseParams,
+      APIResponse<Partial<ExerciseResponseDTO>>,
+      DeepPartial<CreateExerciseDTO>,
+      QueryWithLanguage
+    >,
+    res: Response,
+  ): Promise<void> {
+    const {
+      body,
+      params: { id },
+    } = req;
+
+    const UpdateExercise = UpdateExerciseCommand.getInstance(
+      this.exerciseRepo,
+      this.translateService,
+    );
+    const exercise = await UpdateExercise.execute(id, body);
+
+    res.status(200).json(new SuccessfulResponse(exercise));
+  }
+
+  @bind
+  @AsyncHandler()
   public async getExerciseById(
     req: Request<
       BaseParams,
       APIResponse<ExerciseResponseDTO | null>,
-      I18nBody,
-      QueryWithLanguage
+      Empty,
+      RequestQuery
     >,
-    res: APIResponse<ExerciseResponseDTO | null>,
+    res: Response,
   ): Promise<void> {
     const {
       params: { id },
-      body: { i18nResults },
+      query,
     } = req;
     const GetExercise = GetExerciseCommand.getInstance(this.exerciseRepo);
+    const exercise = await GetExercise.execute(id, query);
 
-    const exercise = await GetExercise.execute(id, i18nResults);
+    if (!exercise) throw new NotFoundException();
 
     res.status(200).json(new SuccessfulResponse(exercise));
   }
@@ -91,8 +118,8 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO[]>,
-      I18nBody,
-      Pagination & QueryWithLanguage
+      Empty,
+      RequestQuery
     >,
     res: Response,
   ): Promise<void> {
@@ -100,8 +127,27 @@ export class ExerciseController {
       this.exerciseRepo,
     );
 
-    const exercises = await GetManyExercises.execute(req.body.i18nResults);
+    const data = await GetManyExercises.execute(req.query);
 
-    res.status(200).json(new SuccessfulResponse(exercises));
+    res.status(200).json({
+      success: true,
+      ...data,
+    });
+  }
+
+  @bind
+  @AsyncHandler()
+  public async deleteOne(
+    req: Request<BaseParams, APIResponse<BaseParams>, Empty, QueryWithLanguage>,
+    res: Response,
+  ): Promise<void> {
+    const {
+      params: { id },
+    } = req;
+    const DeleteExercise = DeleteExerciseCommand.getInstance(this.exerciseRepo);
+
+    await DeleteExercise.execute(id);
+
+    res.status(200).json(new SuccessfulResponse({ id }));
   }
 }

@@ -2,5 +2,8 @@ import { LanguageCodes } from '../../../app/contracts/i18n/models/target-languag
 import { ExerciseDocument } from './exercise-document.type';
 
 export interface ExerciseModelMiddlewares {
-  mergeTranslation: (this: ExerciseDocument, language: LanguageCodes) => void;
+  mergeTranslations: (
+    this: ExerciseDocument,
+    languages: LanguageCodes[],
+  ) => void;
 }

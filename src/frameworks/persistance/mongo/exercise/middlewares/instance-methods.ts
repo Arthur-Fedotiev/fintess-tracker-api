@@ -1,9 +1,11 @@
 import { ExerciseDocument } from '../../../../../entities/exercise';
 import { LanguageCodes } from '../../../../../app/contracts/i18n/models/target-languages.type';
 
-export function mergeTranslation(
+export function mergeTranslations(
   this: ExerciseDocument,
-  language: LanguageCodes,
+  languages: LanguageCodes[],
 ): void {
-  Object.assign(this, this[language], { [language]: undefined });
+  languages.forEach((language) =>
+    Object.assign(this, this[language], { [language]: undefined }),
+  );
 }

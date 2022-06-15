@@ -1,12 +1,11 @@
 import { ExerciseResponseDTO } from '../../../entities/exercise';
 import { ExerciseRepository } from '../../contracts';
 import { UseCaseExecutor } from '../common/use-case.interface';
-import { RequestQuery } from '../../shared/models/api/request-query.type';
 
-export class GetExerciseCommand
+export class DeleteExerciseCommand
   implements UseCaseExecutor<ExerciseResponseDTO | null>
 {
-  private static instance: GetExerciseCommand;
+  private static instance: DeleteExerciseCommand;
 
   private constructor(
     private readonly exerciseRepository: ExerciseRepository,
@@ -14,18 +13,19 @@ export class GetExerciseCommand
 
   public static getInstance(
     exerciseRepository: ExerciseRepository,
-  ): GetExerciseCommand {
-    if (!GetExerciseCommand.instance) {
-      GetExerciseCommand.instance = new GetExerciseCommand(exerciseRepository);
+  ): DeleteExerciseCommand {
+    if (!DeleteExerciseCommand.instance) {
+      DeleteExerciseCommand.instance = new DeleteExerciseCommand(
+        exerciseRepository,
+      );
     }
 
-    return GetExerciseCommand.instance;
+    return DeleteExerciseCommand.instance;
   }
 
   public async execute(
     id: number | string,
-    query?: RequestQuery,
   ): Promise<ExerciseResponseDTO | null> {
-    return this.exerciseRepository.getOneById(id, query);
+    return this.exerciseRepository.deleteOne(id);
   }
 }

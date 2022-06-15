@@ -5,6 +5,7 @@
   "rules": {
     "no-console": "warn",
     "no-non-null-assertion": "off",
+    "eslint/no-empty-function": { "allow": ["private-constructors"] },
     "object-property-newline": [
       "error",
       { "allowAllPropertiesOnSameLine": false }
