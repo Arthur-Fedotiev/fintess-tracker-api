@@ -5,4 +5,5 @@ export enum MongooseErrorNamesEnum {
 
 export enum MongooseErrorCodesEnum {
   'Duplicate' = 11000,
+  'Exclusion' = 31254,
 }

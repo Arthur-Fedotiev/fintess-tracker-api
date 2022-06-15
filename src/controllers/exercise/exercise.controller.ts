@@ -8,8 +8,6 @@ import { TranslateService } from '../../app/contracts/i18n/translate-service';
 import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
 import { ExerciseResponseDTO } from '../../entities/exercise';
-import { I18nBody } from '../../app/shared/models/api/i18n-extended-request.interface';
-import { Pagination } from '../../app/shared/models/api/pagination.interface';
 import { BaseParams } from '../../app/shared/models/api/base-params.interface';
 import { QueryWithLanguage } from '../../app/shared/models/api/query-with-language.interface';
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
@@ -20,6 +18,7 @@ import { NotFoundException } from '../../app/shared/models/error/not-found';
 import { CreateExerciseDTO } from './dto/create-exercise-dto';
 import { UpdateExerciseCommand } from '../../app/use-cases/exercise/UpdateExercise';
 import { DeepPartial } from '../../app/shared/models/common/deep-partial.type';
+import { RequestQuery } from '../../app/shared/models/api/request-query.type';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -49,7 +48,7 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO>,
-      CreateExerciseDTO & I18nBody,
+      CreateExerciseDTO,
       QueryWithLanguage
     >,
     res: Response,
@@ -96,18 +95,17 @@ export class ExerciseController {
     req: Request<
       BaseParams,
       APIResponse<ExerciseResponseDTO | null>,
-      I18nBody,
-      QueryWithLanguage
+      Empty,
+      RequestQuery
     >,
-    res: APIResponse<ExerciseResponseDTO | null>,
+    res: Response,
   ): Promise<void> {
     const {
       params: { id },
-      body: { i18nResults },
+      query,
     } = req;
     const GetExercise = GetExerciseCommand.getInstance(this.exerciseRepo);
-
-    const exercise = await GetExercise.execute(id, i18nResults);
+    const exercise = await GetExercise.execute(id, query);
 
     if (!exercise) throw new NotFoundException();
 
@@ -120,8 +118,8 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO[]>,
-      I18nBody,
-      Pagination & QueryWithLanguage
+      Empty,
+      RequestQuery
     >,
     res: Response,
   ): Promise<void> {
@@ -129,9 +127,12 @@ export class ExerciseController {
       this.exerciseRepo,
     );
 
-    const exercises = await GetManyExercises.execute(req.body.i18nResults);
+    const data = await GetManyExercises.execute(req.query);
 
-    res.status(200).json(new SuccessfulResponse(exercises));
+    res.status(200).json({
+      success: true,
+      ...data,
+    });
   }
 
   @bind

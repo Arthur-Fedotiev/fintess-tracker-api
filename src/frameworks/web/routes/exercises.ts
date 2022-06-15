@@ -3,7 +3,6 @@ import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exer
 import { ExerciseController } from '../../../controllers/exercise/exercise.controller';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
 import validationMiddleware from '../../common/error/validation.middleware';
-import { i18nResults } from '../../i18n/middlewares/i18n-results';
 
 export const exerciseRouter = (dependencies: ProjectDependencies) => {
   const router = express.Router();
@@ -12,12 +11,12 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
 
   router
     .route('/')
-    .get(i18nResults, controller.getExercises)
+    .get(controller.getExercises)
     .post(validationMiddleware(CreateExerciseDTO), controller.createExercise);
 
   router
     .route('/:id')
-    .get(i18nResults, controller.getExerciseById)
+    .get(controller.getExerciseById)
     .patch(
       validationMiddleware(CreateExerciseDTO, true),
       controller.updateOneExercise,

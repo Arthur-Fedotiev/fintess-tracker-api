@@ -33,5 +33,7 @@ projectDependencies.DatabaseService.connect()
     process.on('unhandledRejection', closeServer(server));
   })
   .catch((err: unknown) => {
-    console.log(`db is not ready, err:${err}`);
+    console.log(`${err}`.red);
+
+    process.exit(1);
   });
