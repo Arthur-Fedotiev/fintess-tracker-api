@@ -27,14 +27,13 @@ export class AdvancedResultsMongooseService {
   >(
     model: mongoose.Model<ModelType>,
     requestQuery: RequestQuery,
-    i18nResults: I18nResults = i18nDefaultConfig,
     options: AdvancedResultsOptions = { paginationInfo: false },
   ): Promise<PaginatedResponse<ResultsType>> {
     const qb = new MongooseQueryBuilder<ModelType, ResultsType, DocType>(
       model,
       requestQuery,
     )
-      .setSelect(i18nResults)
+      .setSelect()
       .setSort()
       .setPopulate(options.populate);
 

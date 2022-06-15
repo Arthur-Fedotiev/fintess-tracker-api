@@ -53,16 +53,8 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     return prev || next ? { prev, next } : undefined;
   }
 
-  public setSelect(
-    i18nResults?: I18nResults,
-  ): MongooseQueryBuilder<ModelType, ResultType, DocType> {
-    if (this.select) {
-      const fields = this.select.split(',').join(' ');
-
-      this.query = this.query.select(fields);
-    } else if (i18nResults) {
-      this.query.select(i18nResults.excludedLanguagesQuery);
-    }
+  public setSelect(): MongooseQueryBuilder<ModelType, ResultType, DocType> {
+    this.doSetSelect();
 
     return this;
   }
@@ -79,6 +71,8 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
 
     return this;
   }
+
+  private doSetSort(): void {}
 
   public setPagination(): MongooseQueryBuilder<ModelType, ResultType, DocType> {
     this.page = parseInt(this.queryPage!, 10) || 1;
@@ -136,5 +130,12 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
           limit: this.limit,
         } as PaginationInfo)
       : undefined;
+  }
+
+  private doSetSelect(): void {
+    if (!this.select) return;
+    const fields = this.select.split(',').join(' ');
+
+    this.query = this.query.select(fields);
   }
 }

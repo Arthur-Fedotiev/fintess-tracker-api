@@ -121,7 +121,7 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO[]>,
-      I18nBody,
+      Empty,
       RequestQuery
     >,
     res: Response,
@@ -130,10 +130,7 @@ export class ExerciseController {
       this.exerciseRepo,
     );
 
-    const data = await GetManyExercises.execute(
-      req.query,
-      req.body.i18nResults,
-    );
+    const data = await GetManyExercises.execute(req.query);
 
     res.status(200).json({
       success: true,

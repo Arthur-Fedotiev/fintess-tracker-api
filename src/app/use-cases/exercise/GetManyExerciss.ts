@@ -28,8 +28,7 @@ export class GetManyExercisesCommand
 
   public async execute(
     query: RequestQuery = {},
-    i18nResults: I18nResults,
   ): Promise<PaginatedResponse<ExerciseResponseDTO[]>> {
-    return this.exerciseRepository.getMany(query, i18nResults);
+    return this.exerciseRepository.getMany(query);
   }
 }

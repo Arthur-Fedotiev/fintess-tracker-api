@@ -20,13 +20,12 @@ export class ExerciseMongoRepository extends ExerciseRepository {
   }
   async getMany(
     query: RequestQuery = {} as RequestQuery,
-    i18nResults: I18nResults = i18nDefaultConfig,
   ): Promise<PaginatedResponse<ExerciseResponseDTO[]>> {
     return this.advancedResultsService.getAdvancedResults<
       Exercise,
       ExerciseResponseDTO[],
       Exercise
-    >(ExerciseModel, query, i18nResults, { paginationInfo: true });
+    >(ExerciseModel, query, { paginationInfo: true });
   }
 
   async getOneById(

@@ -12,7 +12,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
 
   router
     .route('/')
-    .get(i18nResults, controller.getExercises)
+    .get(controller.getExercises)
     .post(validationMiddleware(CreateExerciseDTO), controller.createExercise);
 
   router
