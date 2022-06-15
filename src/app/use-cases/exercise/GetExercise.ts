@@ -1,7 +1,7 @@
 import { ExerciseResponseDTO } from '../../../entities/exercise';
-import { I18nResults } from '../../contracts/i18n/models/i18n-results.interface';
 import { ExerciseRepository } from '../../contracts';
 import { UseCaseExecutor } from '../common/use-case.interface';
+import { RequestQuery } from '../../shared/models/api/request-query.type';
 
 export class GetExerciseCommand
   implements UseCaseExecutor<ExerciseResponseDTO | null>
@@ -24,8 +24,8 @@ export class GetExerciseCommand
 
   public async execute(
     id: number | string,
-    i18nResults?: I18nResults,
+    query?: RequestQuery,
   ): Promise<ExerciseResponseDTO | null> {
-    return this.exerciseRepository.getOneById(id, i18nResults);
+    return this.exerciseRepository.getOneById(id, query);
   }
 }

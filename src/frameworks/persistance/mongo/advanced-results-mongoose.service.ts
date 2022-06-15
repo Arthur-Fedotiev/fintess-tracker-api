@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import { MongooseQueryBuilder } from './exercise/utils/mongoose-query-builder';
 import { AdvancedResultsOptions } from './types/advanced-results-options.interface';
-import { i18nDefaultConfig } from '../../../app/contracts/i18n/constants/i18n-default-config';
-import { I18nResults } from '../../../app/contracts/i18n/models/i18n-results.interface';
+
 import { PaginatedResponse } from '../../../app/shared/models/api/pagination/paginated-response.interface';
 import { RequestQuery } from '../../../app/shared/models/api/request-query.type';
 

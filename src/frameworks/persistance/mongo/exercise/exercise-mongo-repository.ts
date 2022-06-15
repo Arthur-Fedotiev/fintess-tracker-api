@@ -4,13 +4,12 @@ import {
   ExerciseRequestDTO,
   ExerciseResponseDTO,
 } from '../../../../entities/exercise';
-import { I18nResults } from '../../../../app/contracts/i18n/models/i18n-results.interface';
 import { ExerciseModel } from './models/Exercise';
-import { i18nDefaultConfig } from '../../../../app/contracts/i18n/constants/i18n-default-config';
 import { DeepPartial } from '../../../../app/shared/models/common/deep-partial.type';
 import { AdvancedResultsMongooseService } from '../advanced-results-mongoose.service';
 import { PaginatedResponse } from '../../../../app/shared/models/api/pagination/paginated-response.interface';
 import { RequestQuery } from '../../../../app/shared/models/api/request-query.type';
+import { MongooseQueryBuilder } from './utils/mongoose-query-builder';
 
 export class ExerciseMongoRepository extends ExerciseRepository {
   constructor(
@@ -19,7 +18,7 @@ export class ExerciseMongoRepository extends ExerciseRepository {
     super();
   }
   async getMany(
-    query: RequestQuery = {} as RequestQuery,
+    query: RequestQuery,
   ): Promise<PaginatedResponse<ExerciseResponseDTO[]>> {
     return this.advancedResultsService.getAdvancedResults<
       Exercise,
@@ -30,13 +29,10 @@ export class ExerciseMongoRepository extends ExerciseRepository {
 
   async getOneById(
     id: string | number,
-    i18nResults: I18nResults = i18nDefaultConfig,
+    query?: RequestQuery,
   ): Promise<ExerciseResponseDTO | null> {
-    const { excludedLanguagesQuery } = i18nResults;
-
-    const exercise = await ExerciseModel.findById(id).select(
-      excludedLanguagesQuery,
-    );
+    const selectQuery = MongooseQueryBuilder.toSelectFields(query?.select);
+    const exercise = await ExerciseModel.findById(id).select(selectQuery);
 
     return exercise ?? null;
   }

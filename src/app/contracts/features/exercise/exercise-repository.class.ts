@@ -3,7 +3,6 @@ import { ExerciseResponseDTO } from '../../../../entities/exercise/models/dto/ex
 import { PaginatedResponse } from '../../../shared/models/api/pagination/paginated-response.interface';
 import { RequestQuery } from '../../../shared/models/api/request-query.type';
 import { DeepPartial } from '../../../shared/models/common/deep-partial.type';
-import { I18nResults } from '../../i18n/models/i18n-results.interface';
 
 export abstract class ExerciseRepository {
   public abstract getMany(
@@ -11,7 +10,7 @@ export abstract class ExerciseRepository {
   ): Promise<PaginatedResponse<ExerciseResponseDTO[]>>;
   public abstract getOneById(
     id: number | string,
-    i18nResults?: I18nResults,
+    query?: RequestQuery,
   ): Promise<ExerciseResponseDTO | null>;
   public abstract createOne(
     dto: ExerciseRequestDTO,

@@ -1,5 +1,4 @@
 import mongoose, { SortOrder } from 'mongoose';
-import { I18nResults } from '../../../../../app/contracts/i18n/models/i18n-results.interface';
 import { PaginationResult } from '../../../../../app/shared/models/api/pagination/pagination-result.interface';
 import { PaginationInfo } from '../../../../../app/shared/models/api/pagination/pagination.interface';
 import { RequestQuery } from '../../../../../app/shared/models/api/request-query.type';
@@ -9,7 +8,7 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
   private static readonly mongooseOperators = /\b(gt|gte|lt|lte|in)\b/g;
 
   private query!: mongoose.Query<ResultType, DocType>;
-  private sanitizedQuery!: string;
+  private sanitizedQuery!: RequestQuery;
   private isPaginationSet = false;
 
   page?: number;
@@ -42,6 +41,19 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     this.reset();
   }
 
+  public static getSanitizedMongooseQuery(query: RequestQuery): RequestQuery {
+    return JSON.parse(
+      JSON.stringify(query).replace(
+        MongooseQueryBuilder.mongooseOperators,
+        (match) => `$${match}`,
+      ),
+    );
+  }
+
+  public static toSelectFields(selectQuery?: string): string {
+    return selectQuery ? selectQuery.split(',').join(' ') : '';
+  }
+
   public async execute(): Promise<mongoose.Query<ResultType, DocType>> {
     return await this.query;
   }
@@ -72,8 +84,6 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     return this;
   }
 
-  private doSetSort(): void {}
-
   public setPagination(): MongooseQueryBuilder<ModelType, ResultType, DocType> {
     this.page = parseInt(this.queryPage!, 10) || 1;
     this.limit = parseInt(this.queryLimit!, 10) || 25;
@@ -97,21 +107,18 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
   }
 
   public reset(): void {
-    this.sanitizedQuery = JSON.stringify(this.rawQueryObj).replace(
-      MongooseQueryBuilder.mongooseOperators,
-      (match) => `$${match}`,
+    this.sanitizedQuery = MongooseQueryBuilder.getSanitizedMongooseQuery(
+      this.rawQueryObj,
     );
 
-    this.query = this.model.find(JSON.parse(this.sanitizedQuery)) as any;
+    this.query = this.model.find(this.sanitizedQuery) as any;
   }
 
   private async getNextPage(): Promise<PaginationInfo | undefined> {
     if (!this.isPaginationSet) return;
 
     const endIndex = this.page! * this.limit!;
-    const total = await this.model.countDocuments(
-      JSON.parse(this.sanitizedQuery),
-    );
+    const total = await this.model.countDocuments(this.sanitizedQuery!);
 
     return endIndex < total
       ? ({
@@ -133,8 +140,7 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
   }
 
   private doSetSelect(): void {
-    if (!this.select) return;
-    const fields = this.select.split(',').join(' ');
+    const fields = MongooseQueryBuilder.toSelectFields(this.select);
 
     this.query = this.query.select(fields);
   }

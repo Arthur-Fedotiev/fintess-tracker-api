@@ -1,5 +1,4 @@
 import { ExerciseResponseDTO } from '../../../entities/exercise';
-import { I18nResults } from '../../contracts/i18n/models/i18n-results.interface';
 import { ExerciseRepository } from '../../contracts';
 import { UseCaseExecutor } from '../common/use-case.interface';
 import { PaginatedResponse } from '../../shared/models/api/pagination/paginated-response.interface';

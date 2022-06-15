@@ -8,8 +8,6 @@ import { TranslateService } from '../../app/contracts/i18n/translate-service';
 import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
 import { ExerciseResponseDTO } from '../../entities/exercise';
-import { I18nBody } from '../../app/shared/models/api/i18n-extended-request.interface';
-import { PaginationInfo } from '../../app/shared/models/api/pagination/pagination.interface';
 import { BaseParams } from '../../app/shared/models/api/base-params.interface';
 import { QueryWithLanguage } from '../../app/shared/models/api/query-with-language.interface';
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
@@ -50,7 +48,7 @@ export class ExerciseController {
     req: Request<
       Empty,
       APIResponse<ExerciseResponseDTO>,
-      CreateExerciseDTO & I18nBody,
+      CreateExerciseDTO,
       QueryWithLanguage
     >,
     res: Response,
@@ -97,18 +95,17 @@ export class ExerciseController {
     req: Request<
       BaseParams,
       APIResponse<ExerciseResponseDTO | null>,
-      I18nBody,
-      QueryWithLanguage
+      Empty,
+      RequestQuery
     >,
-    res: APIResponse<ExerciseResponseDTO | null>,
+    res: Response,
   ): Promise<void> {
     const {
       params: { id },
-      body: { i18nResults },
+      query,
     } = req;
     const GetExercise = GetExerciseCommand.getInstance(this.exerciseRepo);
-
-    const exercise = await GetExercise.execute(id, i18nResults);
+    const exercise = await GetExercise.execute(id, query);
 
     if (!exercise) throw new NotFoundException();
 
