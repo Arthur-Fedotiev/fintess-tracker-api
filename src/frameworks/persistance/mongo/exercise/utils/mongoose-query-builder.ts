@@ -1,6 +1,7 @@
 import mongoose, { SortOrder } from 'mongoose';
 import { I18nResults } from '../../../../../app/contracts/i18n/models/i18n-results.interface';
 import { PaginationResult } from '../../../../../app/shared/models/api/pagination/pagination-result.interface';
+import { PaginationInfo } from '../../../../../app/shared/models/api/pagination/pagination.interface';
 import { RequestQuery } from '../../../../../app/shared/models/api/request-query.type';
 import { PopulateParams } from '../../types/populate-params.type';
 
@@ -9,6 +10,7 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
 
   private query!: mongoose.Query<ResultType, DocType>;
   private sanitizedQuery!: string;
+  private isPaginationSet = false;
 
   page?: number;
   limit?: number;
@@ -33,10 +35,6 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     return reqQuery;
   }
 
-  public async execute(): Promise<mongoose.Query<ResultType, DocType>> {
-    return await this.query;
-  }
-
   constructor(
     private readonly model: mongoose.Model<ModelType>,
     private readonly requestQuery: RequestQuery,
@@ -44,32 +42,15 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     this.reset();
   }
 
-  public async getPaginationResults(): Promise<PaginationResult> {
-    if (!(this.startIndex != null && this.page != null && this.limit != null)) {
-      return {};
-    }
-    const pagination = {} as any;
+  public async execute(): Promise<mongoose.Query<ResultType, DocType>> {
+    return await this.query;
+  }
 
-    const endIndex = this.page * this.limit;
-    const total = await this.model.countDocuments(
-      JSON.parse(this.sanitizedQuery),
-    );
+  public async getPaginationResults(): Promise<PaginationResult | undefined> {
+    const next = await this.getNextPage();
+    const prev = this.getPrevPage();
 
-    if (endIndex < total) {
-      pagination.next = {
-        page: this.page + 1,
-        limit: this.limit,
-      };
-    }
-
-    if (this.startIndex > 0) {
-      pagination.prev = {
-        page: this.page - 1,
-        limit: this.limit,
-      };
-    }
-
-    return pagination;
+    return prev || next ? { prev, next } : undefined;
   }
 
   public setSelect(
@@ -104,6 +85,8 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     this.limit = parseInt(this.queryLimit!, 10) || 25;
     this.startIndex = (this.page - 1) * this.limit;
 
+    this.isPaginationSet = true;
+
     this.query = this.query.skip(this.startIndex).limit(this.limit);
 
     return this;
@@ -126,5 +109,32 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     );
 
     this.query = this.model.find(JSON.parse(this.sanitizedQuery)) as any;
+  }
+
+  private async getNextPage(): Promise<PaginationInfo | undefined> {
+    if (!this.isPaginationSet) return;
+
+    const endIndex = this.page! * this.limit!;
+    const total = await this.model.countDocuments(
+      JSON.parse(this.sanitizedQuery),
+    );
+
+    return endIndex < total
+      ? ({
+          page: this.page! + 1,
+          limit: this.limit,
+        } as PaginationInfo)
+      : undefined;
+  }
+
+  private getPrevPage(): PaginationInfo | undefined {
+    if (!this.isPaginationSet) return;
+
+    return this.startIndex! > 0
+      ? ({
+          page: this.page! - 1,
+          limit: this.limit,
+        } as PaginationInfo)
+      : undefined;
   }
 }

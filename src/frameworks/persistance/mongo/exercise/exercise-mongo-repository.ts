@@ -26,7 +26,7 @@ export class ExerciseMongoRepository extends ExerciseRepository {
       Exercise,
       ExerciseResponseDTO[],
       Exercise
-    >(ExerciseModel, query, i18nResults);
+    >(ExerciseModel, query, i18nResults, { paginationInfo: true });
   }
 
   async getOneById(

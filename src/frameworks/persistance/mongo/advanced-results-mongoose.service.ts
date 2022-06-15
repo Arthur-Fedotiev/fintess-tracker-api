@@ -28,7 +28,7 @@ export class AdvancedResultsMongooseService {
     model: mongoose.Model<ModelType>,
     requestQuery: RequestQuery,
     i18nResults: I18nResults = i18nDefaultConfig,
-    options: AdvancedResultsOptions = {},
+    options: AdvancedResultsOptions = { paginationInfo: false },
   ): Promise<PaginatedResponse<ResultsType>> {
     const qb = new MongooseQueryBuilder<ModelType, ResultsType, DocType>(
       model,
@@ -36,15 +36,19 @@ export class AdvancedResultsMongooseService {
     )
       .setSelect(i18nResults)
       .setSort()
-      .setPagination()
       .setPopulate(options.populate);
 
+    if (options.paginationInfo) {
+      qb.setPagination();
+    }
+
     const data = await qb.execute();
-    const pagination = await qb.getPaginationResults();
 
     return {
-      count: data.length,
-      pagination,
+      count: options.paginationInfo ? data.length : undefined,
+      pagination: options.paginationInfo
+        ? await qb.getPaginationResults()
+        : undefined,
       data,
     };
   }
