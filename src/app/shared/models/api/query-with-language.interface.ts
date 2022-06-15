@@ -6,6 +6,6 @@ type SelectLanguageQuery =
   | `${LanguageCodes},${LanguageCodes},${LanguageCodes}`
   | `${LanguageCodes},${LanguageCodes},${LanguageCodes},${LanguageCodes}`;
 
-export interface QueryWithLanguage {
+export type QueryWithLanguage = {
   lang?: SelectLanguageQuery;
-}
+} & Record<string, string>;

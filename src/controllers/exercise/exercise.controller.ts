@@ -9,7 +9,7 @@ import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
 import { ExerciseResponseDTO } from '../../entities/exercise';
 import { I18nBody } from '../../app/shared/models/api/i18n-extended-request.interface';
-import { Pagination } from '../../app/shared/models/api/pagination.interface';
+import { PaginationInfo } from '../../app/shared/models/api/pagination/pagination.interface';
 import { BaseParams } from '../../app/shared/models/api/base-params.interface';
 import { QueryWithLanguage } from '../../app/shared/models/api/query-with-language.interface';
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
@@ -20,6 +20,7 @@ import { NotFoundException } from '../../app/shared/models/error/not-found';
 import { CreateExerciseDTO } from './dto/create-exercise-dto';
 import { UpdateExerciseCommand } from '../../app/use-cases/exercise/UpdateExercise';
 import { DeepPartial } from '../../app/shared/models/common/deep-partial.type';
+import { RequestQuery } from '../../app/shared/models/api/request-query.type';
 
 export class ExerciseController {
   private static instance: ExerciseController;
@@ -121,7 +122,7 @@ export class ExerciseController {
       Empty,
       APIResponse<ExerciseResponseDTO[]>,
       I18nBody,
-      Pagination & QueryWithLanguage
+      RequestQuery
     >,
     res: Response,
   ): Promise<void> {
@@ -129,9 +130,15 @@ export class ExerciseController {
       this.exerciseRepo,
     );
 
-    const exercises = await GetManyExercises.execute(req.body.i18nResults);
+    const data = await GetManyExercises.execute(
+      req.query,
+      req.body.i18nResults,
+    );
 
-    res.status(200).json(new SuccessfulResponse(exercises));
+    res.status(200).json({
+      success: true,
+      ...data,
+    });
   }
 
   @bind

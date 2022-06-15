@@ -2,9 +2,11 @@ import { ExerciseResponseDTO } from '../../../entities/exercise';
 import { I18nResults } from '../../contracts/i18n/models/i18n-results.interface';
 import { ExerciseRepository } from '../../contracts';
 import { UseCaseExecutor } from '../common/use-case.interface';
+import { PaginatedResponse } from '../../shared/models/api/pagination/paginated-response.interface';
+import { RequestQuery } from '../../shared/models/api/request-query.type';
 
 export class GetManyExercisesCommand
-  implements UseCaseExecutor<ExerciseResponseDTO[]>
+  implements UseCaseExecutor<PaginatedResponse<ExerciseResponseDTO[]>>
 {
   private static instance: GetManyExercisesCommand;
 
@@ -25,8 +27,9 @@ export class GetManyExercisesCommand
   }
 
   public async execute(
+    query: RequestQuery = {},
     i18nResults: I18nResults,
-  ): Promise<ExerciseResponseDTO[]> {
-    return this.exerciseRepository.getMany(i18nResults);
+  ): Promise<PaginatedResponse<ExerciseResponseDTO[]>> {
+    return this.exerciseRepository.getMany(query, i18nResults);
   }
 }
