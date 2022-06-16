@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '../../../app/shared/models/error/http-exception';
 import { InternalServerException } from '../../../app/shared/models/error/internal';
+import { AppLogger } from '../log/winston-logger';
 import { CustomMongooseError } from './custom-mongoose-error.type';
 import {
   MongooseErrorCodesEnum,
@@ -23,7 +24,7 @@ export const errorHandler = (
       : MONGOOSE_ERRORS_MAP.get(mongooseErrorIdentifier)?.(err) ??
         new InternalServerException();
 
-  console.log('Error exception'.red, error);
+  AppLogger.error(error);
 
   res.status(error.statusCode).json({
     success: false,
