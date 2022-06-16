@@ -11,6 +11,8 @@ import {
 import { mapTranslatedValuesToKeys } from './utils/map-translated-values-to-keys';
 import { setTranslation } from './utils/set-translation';
 import { mapTranslatedData } from './utils/translation-mappers';
+import { AppLogger } from '../common/log/winston-logger';
+import { InternalServerException } from '../../app/shared/models/error/internal';
 
 export class GoogleTranslateService extends TranslateService {
   constructor(private readonly translateProvider: v2.Translate) {
@@ -20,67 +22,62 @@ export class GoogleTranslateService extends TranslateService {
   public async translate<T extends string | object>(
     translatableData: T,
   ): Promise<Translations<string | object>> {
-    const translatableEntries: [string, string][] =
-      Object.entries(translatableData);
+    try {
+      const translatableEntries: [string, string][] =
+        Object.entries(translatableData);
 
-    const rawTranslatedData: (TranslationDTO<string> | null)[] =
-      await Promise.all(
-        translatableEntries.map(([, value]) => this.translateToLangs(value)),
+      const rawTranslatedData: (TranslationDTO<string> | null)[] =
+        await Promise.all(
+          translatableEntries.map(([, value]) => this.translateToLangs(value)),
+        );
+
+      const mappedTranslatedData = translatableEntries.reduce(
+        mapTranslatedValuesToKeys(
+          rawTranslatedData.filter((data): data is TranslationDTO<string> =>
+            Boolean(data),
+          ),
+        ),
+        {} as TranslatedData<ExerciseTranslatableData>,
       );
 
-    const mappedTranslatedData = translatableEntries.reduce(
-      mapTranslatedValuesToKeys(
-        rawTranslatedData.filter((data): data is TranslationDTO<string> =>
-          Boolean(data),
-        ),
-      ),
-      {} as TranslatedData<ExerciseTranslatableData>,
-    );
+      const translations: Translations<ExerciseTranslatableData> =
+        mapTranslatedData<ExerciseTranslatableData>(mappedTranslatedData);
 
-    const translations: Translations<ExerciseTranslatableData> =
-      mapTranslatedData<ExerciseTranslatableData>(mappedTranslatedData);
+      return translations;
+    } catch (error) {
+      AppLogger.error(error);
 
-    return translations;
+      throw new InternalServerException('Translation service problem');
+    }
   }
 
   private async translateText(
     text: string,
     targetLanguage: LanguageCodes,
   ): Promise<string> {
-    try {
-      const [result] = await this.translateProvider.translate(
-        text,
-        targetLanguage,
-      );
+    const [result] = await this.translateProvider.translate(
+      text,
+      targetLanguage,
+    );
 
-      return result;
-    } catch (error) {
-      console.log(`Error at translateText --> ${error}`.red);
-      return '';
-    }
+    return result;
   }
 
   private async translateToLangs(
     text: string,
     targetLanguages = LANGUAGE_CODES,
   ): Promise<TranslationDTO<string> | null> {
-    try {
-      const translations: Promise<string>[] = targetLanguages.map((language) =>
-        this.translateText(text, language),
-      );
+    const translations: Promise<string>[] = targetLanguages.map((language) =>
+      this.translateText(text, language),
+    );
 
-      const result = await Promise.all(translations);
+    const result = await Promise.all(translations);
 
-      const response: TranslationDTO<string> = result.reduce(
-        setTranslation(targetLanguages),
-        {} as TranslationDTO<string>,
-      );
+    const response: TranslationDTO<string> = result.reduce(
+      setTranslation(targetLanguages),
+      {} as TranslationDTO<string>,
+    );
 
-      return response;
-    } catch (error) {
-      console.log(`Error at translateToLangs --> ${error}`.red);
-
-      return null;
-    }
+    return response;
   }
 }
