@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { ENV_CONFIG } from './env-config';
 import { useLogger } from './app/shared/utils/use-logger';
 
@@ -9,13 +9,16 @@ import { apiRouter } from './frameworks/web/routes';
 import { errorHandler } from './frameworks/common/error/error-handler';
 import { closeServer } from './close-server';
 import { AppLogger } from './frameworks/common/log/winston-logger';
+import { initFirebaseAdmin } from './frameworks/authentication/firebase/init-firebase-admin';
 
 const app = express();
 const PORT = ENV_CONFIG.port;
 
 projectDependencies.DatabaseService.connect()
+  .then(initFirebaseAdmin)
   .then(() => {
     useLogger(app);
+
     app.use(express.json());
     app.use('/', apiRouter(projectDependencies));
 
