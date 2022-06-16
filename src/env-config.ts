@@ -15,4 +15,7 @@ export const ENV_CONFIG: EnvironmentConfig = {
   googleTranslateCreds: JSON.parse(
     process.env.GOOGLE_TRANSLATE_CREDENTIALS as unknown as string,
   ),
+  firebaseAdminCreds: JSON.parse(
+    process.env.FIREBASE_ADMIN as unknown as string,
+  ),
 };
