@@ -1,3 +1,4 @@
+import { ServiceAccount } from 'firebase-admin';
 import { NodeEnvEnum } from '../../constants/node-env.enum';
 import { GoogleTranslateCredentials } from './google-translate-credentials.interface';
 
@@ -6,4 +7,5 @@ export interface EnvironmentConfig {
   readonly port?: number | string;
   readonly mongoURI?: string;
   readonly googleTranslateCreds: GoogleTranslateCredentials;
+  readonly firebaseAdminCreds: ServiceAccount;
 }
