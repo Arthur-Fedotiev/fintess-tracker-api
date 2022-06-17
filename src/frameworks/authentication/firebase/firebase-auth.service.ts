@@ -1,11 +1,11 @@
-import { AuthRepository } from '../../../app/contracts/features/auth/auth-repository.class';
 import { AuthService } from '../../../app/contracts/features/auth/auth-service';
 import admin from 'firebase-admin';
 import { ENV_CONFIG } from '../../../env-config';
 import bind from 'bind-decorator';
-import { FirebaseAuthRepository } from '../../authentication/firebase/firebase-auth-repository';
+import { FirebaseAuthRepository } from './firebase-auth-repository';
 import { NextFunction } from 'express';
 import { UnauthorizedException } from '../../../app/shared/models/error/unauthorized';
+import { AsyncHandler } from '../../../app/shared/decorators/async-handler';
 
 export class FirebaseAuthService extends AuthService {
   private readonly unauthorizedMessage =
@@ -27,19 +27,24 @@ export class FirebaseAuthService extends AuthService {
   }
 
   @bind
-  public authProtected(req: any, _res: any, next: NextFunction): void {
-    if (req.headers.authorization) {
-      admin
-        .auth()
-        .verifyIdToken(req.headers.authorization)
-        .then(() => {
-          next();
-        })
-        .catch(() => {
-          next(new UnauthorizedException(this.unauthorizedMessage));
-        });
-    } else {
-      next(new UnauthorizedException(this.unauthorizedMessage));
-    }
+  @AsyncHandler()
+  public async authProtected(
+    req: any,
+    _res: any,
+    next: NextFunction,
+  ): Promise<void> {
+    const token = this.getAuthToken(req.headers.authorization);
+
+    if (!token) next(new UnauthorizedException(this.unauthorizedMessage));
+
+    await this.firebaseAdminApp.auth().verifyIdToken(token!);
+
+    next();
+  }
+
+  private getAuthToken(authorization?: string): string | null {
+    const [bearer, token] = (authorization ?? '').split(' ');
+
+    return bearer === 'Bearer' && token ? token : null;
   }
 }
