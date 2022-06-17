@@ -38,4 +38,15 @@ export class AuthController {
 
     res.status(200).json(new SuccessfulResponse(user));
   }
+
+  @bind
+  @AsyncHandler()
+  public async currentUser(
+    req: Request & { user?: User },
+    res: Response,
+  ): Promise<void> {
+    const { user } = req;
+
+    res.status(200).json(new SuccessfulResponse(user));
+  }
 }

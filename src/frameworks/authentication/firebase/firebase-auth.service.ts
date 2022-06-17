@@ -6,6 +6,7 @@ import { FirebaseAuthRepository } from './firebase-auth-repository';
 import { NextFunction } from 'express';
 import { UnauthorizedException } from '../../../app/shared/models/error/unauthorized';
 import { AsyncHandler } from '../../../app/shared/decorators/async-handler';
+import { AppLogger } from '../../common/log/winston-logger';
 
 export class FirebaseAuthService extends AuthService {
   private readonly unauthorizedMessage =
@@ -37,7 +38,7 @@ export class FirebaseAuthService extends AuthService {
 
     if (!token) next(new UnauthorizedException(this.unauthorizedMessage));
 
-    await this.firebaseAdminApp.auth().verifyIdToken(token!);
+    req.user = await this.firebaseAdminApp.auth().verifyIdToken(token!);
 
     next();
   }
