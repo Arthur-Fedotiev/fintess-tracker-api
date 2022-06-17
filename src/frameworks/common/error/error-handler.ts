@@ -15,6 +15,9 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
+  AppLogger.info(err.code);
+  AppLogger.error(err);
+
   const mongooseErrorIdentifier =
     MongooseErrorNamesEnum[err.name] ?? MongooseErrorCodesEnum[err.code];
 
@@ -23,8 +26,6 @@ export const errorHandler = (
       ? err
       : MONGOOSE_ERRORS_MAP.get(mongooseErrorIdentifier)?.(err) ??
         new InternalServerException();
-
-  AppLogger.error(error);
 
   res.status(error.statusCode).json({
     success: false,
