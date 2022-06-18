@@ -9,6 +9,7 @@ import { apiRouter } from './frameworks/web/routes';
 import { errorHandler } from './frameworks/common/error/error-handler';
 import { closeServer } from './close-server';
 import { AppLogger } from './frameworks/common/log/winston-logger';
+import { useSecure } from './frameworks/common/secure/use-secure';
 
 const app = express();
 const PORT = ENV_CONFIG.port;
@@ -17,10 +18,10 @@ projectDependencies.DatabaseService.connect()
   .then(projectDependencies.AuthService.init)
   .then(() => {
     useLogger(app);
+    useSecure(app);
 
     app.use(express.json());
     app.use('/', apiRouter(projectDependencies));
-
     app.use(errorHandler);
 
     const server = app.listen(PORT, () =>
