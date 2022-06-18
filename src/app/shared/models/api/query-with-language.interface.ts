@@ -1,6 +1,6 @@
 import { LanguageCodes } from '../../../contracts/i18n/models/target-languages.type';
 
-type SelectLanguageQuery =
+export type SelectLanguageQuery =
   | `${LanguageCodes}`
   | `${LanguageCodes},${LanguageCodes}`
   | `${LanguageCodes},${LanguageCodes},${LanguageCodes}`
