@@ -1,6 +1,6 @@
 export class HttpException extends Error {
   public messages: string[] = [];
-  constructor(message: string | string[], public statusCode = 500) {
+  constructor(message: string | string[], public readonly statusCode = 500) {
     const serializedMessages = JSON.stringify(message);
 
     super(serializedMessages);

@@ -3,6 +3,8 @@ import { HttpException } from '../../../app/shared/models/error/http-exception';
 import { InternalServerException } from '../../../app/shared/models/error/internal';
 import { AppLogger } from '../log/winston-logger';
 import { CustomMongooseError } from './custom-mongoose-error.type';
+import { FirebaseAuthErrorCodes } from './firebase-auth-error-codes.enum';
+import { getFirebaseError } from './getFirebaseError';
 import {
   MongooseErrorCodesEnum,
   MongooseErrorNamesEnum,
@@ -15,6 +17,9 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
+  AppLogger.info(err.code);
+  AppLogger.error(err);
+
   const mongooseErrorIdentifier =
     MongooseErrorNamesEnum[err.name] ?? MongooseErrorCodesEnum[err.code];
 
@@ -22,9 +27,8 @@ export const errorHandler = (
     err instanceof HttpException
       ? err
       : MONGOOSE_ERRORS_MAP.get(mongooseErrorIdentifier)?.(err) ??
+        getFirebaseError(err.code as unknown as FirebaseAuthErrorCodes) ??
         new InternalServerException();
-
-  AppLogger.error(error);
 
   res.status(error.statusCode).json({
     success: false,
