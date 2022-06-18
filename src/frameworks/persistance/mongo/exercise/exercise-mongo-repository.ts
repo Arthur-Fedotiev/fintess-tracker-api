@@ -10,6 +10,7 @@ import { AdvancedResultsMongooseService } from '../advanced-results-mongoose.ser
 import { PaginatedResponse } from '../../../../app/shared/models/api/pagination/paginated-response.interface';
 import { RequestQuery } from '../../../../app/shared/models/api/request-query.type';
 import { MongooseQueryBuilder } from './utils/mongoose-query-builder';
+import { WithID } from '../../../../app/shared/models/api/with-id.interface';
 
 export class ExerciseMongoRepository extends ExerciseRepository {
   constructor(
@@ -43,7 +44,7 @@ export class ExerciseMongoRepository extends ExerciseRepository {
     return await ExerciseModel.create(dto);
   }
 
-  async deleteOne(id: string | number): Promise<ExerciseResponseDTO | null> {
+  async deleteOne(id: string | number): Promise<WithID | null> {
     return ExerciseModel.findByIdAndRemove(id, { select: 'id' });
   }
 

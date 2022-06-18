@@ -2,19 +2,19 @@ import express from 'express';
 import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exercise-dto';
 import { ExerciseController } from '../../../controllers/exercise/exercise.controller';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
-import { firebaseAuthProtected } from '../../authentication/firebase/auth-middleware';
 import validationMiddleware from '../../common/error/validation.middleware';
 
 export const exerciseRouter = (dependencies: ProjectDependencies) => {
   const router = express.Router();
 
   const controller = ExerciseController.getInstance(dependencies);
+  const { authProtected, adminOnly } = dependencies.AuthService;
 
   router
     .route('/')
     .get(controller.getExercises)
     .post(
-      firebaseAuthProtected,
+      authProtected(),
       validationMiddleware(CreateExerciseDTO),
       controller.createExercise,
     );
@@ -23,11 +23,11 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
     .route('/:id')
     .get(controller.getExerciseById)
     .patch(
-      firebaseAuthProtected,
+      authProtected(),
       validationMiddleware(CreateExerciseDTO, true),
       controller.updateOneExercise,
     )
-    .delete(firebaseAuthProtected, controller.deleteOne);
+    .delete(adminOnly, controller.deleteOne);
 
   return router;
 };

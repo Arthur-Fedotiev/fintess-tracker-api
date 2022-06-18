@@ -9,13 +9,12 @@ import { apiRouter } from './frameworks/web/routes';
 import { errorHandler } from './frameworks/common/error/error-handler';
 import { closeServer } from './close-server';
 import { AppLogger } from './frameworks/common/log/winston-logger';
-import { initFirebaseAdmin } from './frameworks/authentication/firebase/init-firebase-admin';
 
 const app = express();
 const PORT = ENV_CONFIG.port;
 
 projectDependencies.DatabaseService.connect()
-  .then(initFirebaseAdmin)
+  .then(projectDependencies.AuthService.init)
   .then(() => {
     useLogger(app);
 

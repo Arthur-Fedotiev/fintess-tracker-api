@@ -1,6 +1,6 @@
 export enum MongooseErrorNamesEnum {
   CastError = 'CastError',
-  'ValidationError' = 'ValidationError',
+  ValidationError = 'ValidationError',
 }
 
 export enum MongooseErrorCodesEnum {

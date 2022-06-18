@@ -1,10 +1,8 @@
-import { ExerciseResponseDTO } from '../../../entities/exercise';
 import { ExerciseRepository } from '../../contracts';
+import { WithID } from '../../shared/models/api/with-id.interface';
 import { UseCaseExecutor } from '../common/use-case.interface';
 
-export class DeleteExerciseCommand
-  implements UseCaseExecutor<ExerciseResponseDTO | null>
-{
+export class DeleteExerciseCommand implements UseCaseExecutor<WithID | null> {
   private static instance: DeleteExerciseCommand;
 
   private constructor(
@@ -23,9 +21,7 @@ export class DeleteExerciseCommand
     return DeleteExerciseCommand.instance;
   }
 
-  public async execute(
-    id: number | string,
-  ): Promise<ExerciseResponseDTO | null> {
+  public async execute(id: number | string): Promise<WithID | null> {
     return this.exerciseRepository.deleteOne(id);
   }
 }
