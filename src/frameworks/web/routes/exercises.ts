@@ -1,4 +1,5 @@
 import express from 'express';
+import { i18n } from '../../../app/contracts/i18n/middlewares/i18n';
 import { CreateExerciseDTO } from '../../../controllers/exercise/dto/create-exercise-dto';
 import { ExerciseController } from '../../../controllers/exercise/exercise.controller';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
@@ -12,7 +13,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
 
   router
     .route('/')
-    .get(controller.getExercises)
+    .get(i18n, controller.getExercises)
     .post(
       authProtected(),
       validationMiddleware(CreateExerciseDTO),
@@ -21,7 +22,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
 
   router
     .route('/:id')
-    .get(controller.getExerciseById)
+    .get(i18n, controller.getExerciseById)
     .patch(
       authProtected(),
       validationMiddleware(CreateExerciseDTO, true),
