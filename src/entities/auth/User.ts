@@ -1,3 +1,5 @@
+import { Roles } from '../../app/shared/constants/roles.enum';
+
 export interface User {
   readonly email: string;
   readonly password: string;
@@ -5,4 +7,5 @@ export interface User {
   readonly phoneNumber?: string;
   readonly lastName?: string;
   readonly photoUrl?: string;
+  readonly role?: Roles;
 }

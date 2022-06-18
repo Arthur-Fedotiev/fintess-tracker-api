@@ -1,4 +1,5 @@
 import { NextFunction } from 'express';
+import { Roles } from '../../../shared/constants/roles.enum';
 import { AuthRepository } from './auth-repository.class';
 
 export abstract class AuthService {
@@ -6,9 +7,6 @@ export abstract class AuthService {
 
   abstract init(): void;
   abstract authProtected(
-    this: AuthService,
-    req: any,
-    _res: any,
-    next: NextFunction,
-  ): void;
+    allowedRoles?: Roles[],
+  ): (this: AuthService, req: any, _res: any, next: NextFunction) => void;
 }

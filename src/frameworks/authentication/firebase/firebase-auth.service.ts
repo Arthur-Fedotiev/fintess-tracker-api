@@ -3,10 +3,11 @@ import admin from 'firebase-admin';
 import { ENV_CONFIG } from '../../../env-config';
 import bind from 'bind-decorator';
 import { FirebaseAuthRepository } from './firebase-auth-repository';
-import { NextFunction } from 'express';
+import { NextFunction, RequestHandler } from 'express';
 import { UnauthorizedException } from '../../../app/shared/models/error/unauthorized';
-import { AsyncHandler } from '../../../app/shared/decorators/async-handler';
-import { AppLogger } from '../../common/log/winston-logger';
+import { Roles } from '../../../app/shared/constants/roles.enum';
+import { User } from '../../../entities/auth/User';
+import { ForbiddenException } from '../../../app/shared/models/error/forbidden';
 
 export class FirebaseAuthService extends AuthService {
   private readonly unauthorizedMessage =
@@ -28,24 +29,39 @@ export class FirebaseAuthService extends AuthService {
   }
 
   @bind
-  @AsyncHandler()
-  public async authProtected(
-    req: any,
-    _res: any,
-    next: NextFunction,
-  ): Promise<void> {
-    const token = this.getAuthToken(req.headers.authorization);
+  public authProtected(allowedRoles?: Roles[]): RequestHandler {
+    const self = this;
+    return async (req: any, _res: any, next: NextFunction): Promise<void> => {
+      try {
+        const token = self.getAuthToken(req.headers.authorization);
 
-    if (!token) next(new UnauthorizedException(this.unauthorizedMessage));
+        if (!token) {
+          next(new UnauthorizedException(self.unauthorizedMessage));
+        }
 
-    req.user = await this.firebaseAdminApp.auth().verifyIdToken(token!);
+        const user = await self.firebaseAdminApp.auth().verifyIdToken(token!);
+        req.user = user;
 
-    next();
+        if (!self.isAllowedRole(user as unknown as User, allowedRoles)) {
+          next(new ForbiddenException());
+        }
+
+        next();
+      } catch (err) {
+        next(err);
+      }
+    };
   }
 
   private getAuthToken(authorization?: string): string | null {
     const [bearer, token] = (authorization ?? '').split(' ');
 
     return bearer === 'Bearer' && token ? token : null;
+  }
+
+  private isAllowedRole(user: User, allowedRoles?: Roles[]): boolean {
+    if (!allowedRoles?.length) return true;
+
+    return !!(user.role && allowedRoles?.includes(user.role));
   }
 }

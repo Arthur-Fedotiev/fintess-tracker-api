@@ -8,13 +8,13 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
   const router = express.Router();
 
   const controller = ExerciseController.getInstance(dependencies);
-  const authService = dependencies.AuthService;
+  const authProtected = dependencies.AuthService.authProtected;
 
   router
     .route('/')
     .get(controller.getExercises)
     .post(
-      authService.authProtected,
+      authProtected(),
       validationMiddleware(CreateExerciseDTO),
       controller.createExercise,
     );
@@ -23,11 +23,11 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
     .route('/:id')
     .get(controller.getExerciseById)
     .patch(
-      authService.authProtected,
+      authProtected(),
       validationMiddleware(CreateExerciseDTO, true),
       controller.updateOneExercise,
     )
-    .delete(authService.authProtected, controller.deleteOne);
+    .delete(authProtected(), controller.deleteOne);
 
   return router;
 };
