@@ -8,7 +8,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
   const router = express.Router();
 
   const controller = ExerciseController.getInstance(dependencies);
-  const authProtected = dependencies.AuthService.authProtected;
+  const { authProtected, adminOnly } = dependencies.AuthService;
 
   router
     .route('/')
@@ -27,7 +27,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
       validationMiddleware(CreateExerciseDTO, true),
       controller.updateOneExercise,
     )
-    .delete(authProtected(), controller.deleteOne);
+    .delete(adminOnly, controller.deleteOne);
 
   return router;
 };

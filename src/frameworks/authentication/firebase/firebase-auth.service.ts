@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 import { ENV_CONFIG } from '../../../env-config';
 import bind from 'bind-decorator';
 import { FirebaseAuthRepository } from './firebase-auth-repository';
-import { NextFunction, RequestHandler } from 'express';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { UnauthorizedException } from '../../../app/shared/models/error/unauthorized';
 import { Roles } from '../../../app/shared/constants/roles.enum';
 import { User } from '../../../entities/auth/User';
@@ -31,7 +31,11 @@ export class FirebaseAuthService extends AuthService {
   @bind
   public authProtected(allowedRoles?: Roles[]): RequestHandler {
     const self = this;
-    return async (req: any, _res: any, next: NextFunction): Promise<void> => {
+    return async (
+      req: Request & { user?: User },
+      _res: Response,
+      next: NextFunction,
+    ): Promise<void> => {
       try {
         const token = self.getAuthToken(req.headers.authorization);
 
@@ -39,10 +43,12 @@ export class FirebaseAuthService extends AuthService {
           next(new UnauthorizedException(self.unauthorizedMessage));
         }
 
-        const user = await self.firebaseAdminApp.auth().verifyIdToken(token!);
+        const user = (await self.firebaseAdminApp
+          .auth()
+          .verifyIdToken(token!)) as unknown as User;
         req.user = user;
 
-        if (!self.isAllowedRole(user as unknown as User, allowedRoles)) {
+        if (!self.isAllowedRole(user, allowedRoles)) {
           next(new ForbiddenException());
         }
 
@@ -51,6 +57,11 @@ export class FirebaseAuthService extends AuthService {
         next(err);
       }
     };
+  }
+
+  @bind
+  public adminOnly(req: Request, res: Response, next: NextFunction): void {
+    this.authProtected([Roles.Admin])(req, res, next);
   }
 
   private getAuthToken(authorization?: string): string | null {

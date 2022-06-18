@@ -8,7 +8,7 @@ import { TranslateService } from '../../app/contracts/i18n/translate-service';
 import { Empty } from '../../app/shared/models/api/empty';
 import { APIResponse } from '../../app/shared/models/api/api-response.interface';
 import { ExerciseResponseDTO } from '../../entities/exercise';
-import { BaseParams } from '../../app/shared/models/api/base-params.interface';
+import { WithID } from '../../app/shared/models/api/with-id.interface';
 import { QueryWithLanguage } from '../../app/shared/models/api/query-with-language.interface';
 import { SuccessfulResponse } from '../../app/shared/models/api/successful-response.model';
 import { AsyncHandler } from '../../app/shared/decorators/async-handler';
@@ -68,7 +68,7 @@ export class ExerciseController {
   @AsyncHandler()
   public async updateOneExercise(
     req: Request<
-      BaseParams,
+      WithID,
       APIResponse<Partial<ExerciseResponseDTO>>,
       DeepPartial<CreateExerciseDTO>,
       QueryWithLanguage
@@ -93,7 +93,7 @@ export class ExerciseController {
   @AsyncHandler()
   public async getExerciseById(
     req: Request<
-      BaseParams,
+      WithID,
       APIResponse<ExerciseResponseDTO | null>,
       Empty,
       RequestQuery
@@ -138,7 +138,7 @@ export class ExerciseController {
   @bind
   @AsyncHandler()
   public async deleteOne(
-    req: Request<BaseParams, APIResponse<BaseParams>, Empty, QueryWithLanguage>,
+    req: Request<WithID, APIResponse<WithID>, Empty, QueryWithLanguage>,
     res: Response,
   ): Promise<void> {
     const {
@@ -146,8 +146,10 @@ export class ExerciseController {
     } = req;
     const DeleteExercise = DeleteExerciseCommand.getInstance(this.exerciseRepo);
 
-    await DeleteExercise.execute(id);
+    const result = await DeleteExercise.execute(id);
 
-    res.status(200).json(new SuccessfulResponse({ id }));
+    if (!result) throw new NotFoundException();
+
+    res.status(200).json(new SuccessfulResponse(result));
   }
 }
