@@ -24,7 +24,7 @@ export const exerciseRouter = (dependencies: ProjectDependencies) => {
     .route('/:id')
     .get(i18n, controller.getExerciseById)
     .patch(
-      authProtected(),
+      adminOnly,
       validationMiddleware(CreateExerciseDTO, true),
       controller.updateOneExercise,
     )
