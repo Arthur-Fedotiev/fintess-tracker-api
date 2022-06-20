@@ -3,7 +3,6 @@ import winston from 'winston';
 import { NodeEnvEnum } from '../../../app/shared/constants/node-env.enum';
 const {
   format: { colorize, combine, printf, timestamp, json, errors },
-  createLogger,
   transports,
 } = winston;
 
