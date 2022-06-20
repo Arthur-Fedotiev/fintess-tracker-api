@@ -1,0 +1,5 @@
+{"level":"warn","message":"\u001b[36mMongoDB was not established! Left attempts: 4 Retrying...\u001b[39m","timestamp":"2022-06-19 10:03:16:316"}
+{"level":"warn","message":"\u001b[36mMongoDB was not established! Left attempts: 3 Retrying...\u001b[39m","timestamp":"2022-06-19 10:03:46:346"}
+{"level":"info","message":"\u001b[36mMongoDB connected: cluster0-shard-00-01.g9fqt.mongodb.net\u001b[39m","timestamp":"2022-06-19 10:06:58:658"}
+{"level":"info","message":"\u001b[1m\u001b[33m⚡ Server running in production mode on port 8080\u001b[39m\u001b[22m","timestamp":"2022-06-19 10:06:58:658"}
+{"level":"info","message":{"select":"-ru -ukr -bg"},"timestamp":"2022-06-19 10:07:33:733"}
