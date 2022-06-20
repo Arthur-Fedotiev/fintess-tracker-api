@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import { ENV_CONFIG } from './env-config';
 import { useLogger } from './app/shared/utils/use-logger';
 
@@ -10,6 +10,7 @@ import { errorHandler } from './frameworks/common/error/error-handler';
 import { closeServer } from './close-server';
 import { AppLogger } from './frameworks/common/log/winston-logger';
 import { useSecure } from './frameworks/common/secure/use-secure';
+import path from 'path';
 
 const app = express();
 const PORT = ENV_CONFIG.port;
@@ -20,14 +21,15 @@ projectDependencies.DatabaseService.connect()
     useLogger(app);
     useSecure(app);
 
+    app.use(express.static(path.join(__dirname, 'public')));
+
     app.use(express.json());
     app.use('/', apiRouter(projectDependencies));
     app.use(errorHandler);
 
     const server = app.listen(PORT, () =>
       AppLogger.info(
-        `⚡ Server running in ${ENV_CONFIG.env} mode on port ${ENV_CONFIG.port}`
-          .yellow.bold,
+        `⚡ Server running in ${ENV_CONFIG.env} mode on port ${ENV_CONFIG.port}`,
       ),
     );
 

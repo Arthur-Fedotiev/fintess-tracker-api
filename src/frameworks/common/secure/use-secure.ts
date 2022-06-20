@@ -12,9 +12,15 @@ const limiter = {
   max: 100,
 };
 
+const directives = {
+  ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+  'script-src': ["'self'", "'unsafe-inline'", 'example.com'],
+};
+
 export const useSecure = (app: Express): void => {
   app.use(mongoSanitize());
   app.use(helmet());
+  app.use(helmet.contentSecurityPolicy({ directives }));
   app.use(xss());
   app.use(hpp());
   app.use(rateLimit(limiter));

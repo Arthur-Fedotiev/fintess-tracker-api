@@ -12,5 +12,7 @@ export const apiRouter = (dependencies: ProjectDependencies) => {
   routes.use('/exercises', exerciseRouter);
   routes.use('/auth', authRouter);
 
+  routes.get('/favicon.ico', (_req, res) => res.status(204).end());
+
   return routes;
 };
