@@ -23,9 +23,9 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
       # (optional - only needed if your config uses environment variables)
-      - name: Create env file
-        run: |
-          touch .env
+      # - name: Create env file
+      #   run: |
+      #     touch .env
 
       - name: Install PM2
         run: yarn add pm2
