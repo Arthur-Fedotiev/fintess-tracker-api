@@ -28,7 +28,7 @@ To be created...
 
 ## Demo
 
-The API is live at [fitness-tracker.live](https://devcamper.live)
+The API is live at [fitness-tracker.live](https://fitness-tracker.live)
 
 Extensive documentation with examples [here](https://documenter.getpostman.com/view/11961976/UzBmMSbR)
 
