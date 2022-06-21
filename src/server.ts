@@ -29,7 +29,7 @@ projectDependencies.DatabaseService.connect()
 
     const server = app.listen(PORT, () =>
       AppLogger.info(
-        `1⚡ ${ENV_CONFIG.env} server running on port ${ENV_CONFIG.port}`,
+        `⚡ ${ENV_CONFIG.env} server running on port ${ENV_CONFIG.port}`,
       ),
     );
 
