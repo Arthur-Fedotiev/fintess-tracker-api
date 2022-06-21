@@ -18,7 +18,7 @@ module.exports = {
     production: {
       user: 'root',
       host: '104.248.129.253',
-      key: 'deploy.key',
+      key: '~/.ssh/deploy.key',
       ref: 'origin/master',
       repo: 'https://github.com/Arthur-Fedotiev/fintess-tracker-api',
       path: '/root/apps/fintess-tracker-api',
