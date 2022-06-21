@@ -13,7 +13,7 @@
     "format:check": "prettier --check .",
     "prestart": "yarn build",
     "start": "cross-env NODE_ENV=production node dist/server.js",
-    "deploy": "pm2 deploy ecosystem.config.js production",
+    "deploy": "env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production",
     "format:write": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix ."
