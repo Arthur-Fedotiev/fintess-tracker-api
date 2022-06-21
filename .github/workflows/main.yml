@@ -23,7 +23,7 @@ jobs:
         #   SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
         uses: MrSquaare/ssh-setup-action@v1
         with:
-          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          host: github.com
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       # (optional - only needed if your config uses environment variables)
       # - name: Create env file
