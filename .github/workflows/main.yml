@@ -25,7 +25,6 @@ jobs:
         with:
           host: ${{ secrets.SSH_KNOWN_HOSTS }}
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       # (optional - only needed if your config uses environment variables)
       # - name: Create env file
       #   run: |
