@@ -12,15 +12,19 @@ jobs:
       # ... other steps, such as running tests, etc...
       #
       - name: Set up SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy.key
-          sudo chmod 600 ~/.ssh/deploy.key
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-        shell: bash
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+        # run: |
+        #   mkdir -p ~/.ssh/
+        #   echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy.key
+        #   sudo chmod 600 ~/.ssh/deploy.key
+        #   echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        # shell: bash
+        # env:
+        #   SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        #   SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # (optional - only needed if your config uses environment variables)
       # - name: Create env file
