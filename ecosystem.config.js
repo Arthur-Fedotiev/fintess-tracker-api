@@ -23,10 +23,7 @@ module.exports = {
       repo: 'https://github.com/Arthur-Fedotiev/fintess-tracker-api',
       path: '/root/apps/fintess-tracker-api',
       'post-deploy':
-        'yarn install && yarn build && pm2 reload ecosystem.config.js --env production && pm2 save && git checkout yarn.lock',
-      env: {
-        NODE_ENV: 'production',
-      },
+        'yarn install && yarn build && pm2 reload ecosystem.config.js && pm2 save && git checkout yarn.lock',
     },
   },
 };
