@@ -15,6 +15,8 @@ export const authRouter = (dependencies: ProjectDependencies) => {
     .route('/signup')
     .post(validationMiddleware(CreateUserDTO), controller.signup);
 
+  router.route('/signin').post(controller.signin);
+
   router.route('/current-user').get(authProtected(), controller.currentUser);
 
   return router;

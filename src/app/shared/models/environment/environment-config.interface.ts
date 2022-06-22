@@ -8,4 +8,5 @@ export interface EnvironmentConfig {
   readonly mongoURI?: string;
   readonly googleTranslateCreds: GoogleTranslateCredentials;
   readonly firebaseAdminCreds: ServiceAccount;
+  readonly webApiToken: string;
 }

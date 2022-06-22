@@ -3,4 +3,7 @@ import { UserWithFullName } from '../../../../entities/auth/models/user-with-ful
 
 export abstract class AuthRepository {
   public abstract signup(user: UserWithFullName): Promise<UserRecord>;
+  public abstract login(
+    credentials: Pick<UserWithFullName, 'email' | 'password'>,
+  ): Promise<string | null>;
 }
