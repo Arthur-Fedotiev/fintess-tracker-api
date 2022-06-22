@@ -1,7 +1,7 @@
 import express from 'express';
-import { Roles } from '../../../app/shared/constants/roles.enum';
 import { AuthController } from '../../../controllers/auth/auth.controller';
 import { CreateUserDTO } from '../../../controllers/auth/dto/create-user-dto';
+import { SigninUserDTO } from '../../../controllers/auth/dto/signin-user-dto copy';
 import { ProjectDependencies } from '../../../dependencies/project-dependencies.interface';
 import validationMiddleware from '../../common/error/validation.middleware';
 
@@ -15,7 +15,9 @@ export const authRouter = (dependencies: ProjectDependencies) => {
     .route('/signup')
     .post(validationMiddleware(CreateUserDTO), controller.signup);
 
-  router.route('/signin').post(controller.signin);
+  router
+    .route('/signin')
+    .post(validationMiddleware(SigninUserDTO), controller.signin);
 
   router.route('/current-user').get(authProtected(), controller.currentUser);
 

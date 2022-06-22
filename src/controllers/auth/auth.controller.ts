@@ -10,8 +10,8 @@ import { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import { User } from '../../entities/auth/User';
 import { UserSignupCommand } from '../../app/use-cases/auth/UserSignup';
 import { UserSigninCommand } from '../../app/use-cases/auth/UserSignin';
-import { UserWithFullName } from '../../entities/auth/models/user-with-full-name';
 import { FirebaseAuthException } from '../../app/shared/models/error/authentication';
+import { UserCredentials } from '../../app/contracts/features/auth/user-credentials';
 
 export class AuthController {
   private static instance: AuthController;
@@ -45,12 +45,7 @@ export class AuthController {
   @bind
   @AsyncHandler()
   public async signin(
-    req: Request<
-      Empty,
-      APIResponse<string | null>,
-      Pick<UserWithFullName, 'email' | 'password'>,
-      Empty
-    >,
+    req: Request<Empty, APIResponse<string | null>, UserCredentials, Empty>,
     res: Response,
   ): Promise<void> {
     const { body } = req;

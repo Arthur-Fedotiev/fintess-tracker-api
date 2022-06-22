@@ -6,6 +6,7 @@ import axios, { AxiosError } from 'axios';
 import { AppLogger } from '../../common/log/winston-logger';
 import { FirebaseAuthException } from '../../../app/shared/models/error/authentication';
 import { ENV_CONFIG } from '../../../env-config';
+import { UserCredentials } from '../../../app/contracts/features/auth/user-credentials';
 
 export class FirebaseAuthRepository extends AuthRepository {
   private firebaseAdminApp!: admin.app.App;
@@ -19,7 +20,7 @@ export class FirebaseAuthRepository extends AuthRepository {
   public async login({
     email,
     password,
-  }: Pick<UserWithFullName, 'email' | 'password'>): Promise<string | null> {
+  }: UserCredentials): Promise<string | null> {
     try {
       const res = await axios.post<{ idToken: string }>(
         `${this.loginURL}${ENV_CONFIG.webApiToken}`,

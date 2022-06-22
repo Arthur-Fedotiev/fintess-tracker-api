@@ -1,5 +1,5 @@
-import { UserWithFullName } from '../../../entities/auth/models/user-with-full-name';
 import { AuthRepository } from '../../contracts/features/auth/auth-repository.class';
+import { UserCredentials } from '../../contracts/features/auth/user-credentials';
 import { UseCaseExecutor } from '../common/use-case.interface';
 
 export class UserSigninCommand implements UseCaseExecutor<string | null> {
@@ -15,9 +15,7 @@ export class UserSigninCommand implements UseCaseExecutor<string | null> {
     return UserSigninCommand.instance;
   }
 
-  public async execute(
-    creds: Pick<UserWithFullName, 'email' | 'password'>,
-  ): Promise<string | null> {
+  public async execute(creds: UserCredentials): Promise<string | null> {
     return await this.authRepository.login(creds);
   }
 }
