@@ -15,6 +15,9 @@ export enum FirebaseAuthErrorCodes {
   'UserNotFound' = 'auth/user-not-found',
   'PhoneExists' = 'auth/phone-number-already-exists',
   'ArgumentError' = 'argument-error',
+  'EmailNotFound' = 'EMAIL_NOT_FOUND',
+  'InvalidLoginPassword' = 'INVALID_PASSWORD',
+  'TooManyAttempts' = 'TOO_MANY_ATTEMPTS_TRY_LATER',
 }
 
 export enum FirebaseAuthErrorMessages {
@@ -34,4 +37,7 @@ export enum FirebaseAuthErrorMessages {
   'auth/project-not-found' = 'No Firebase project was found for the credential used to initialize the Admin SDKs.',
   'auth/user-not-found' = 'There is no existing user record corresponding to the provided identifier.',
   'argument-error' = 'Authentication service error.',
+  'EMAIL_NOT_FOUND' = 'User with specified email is not found',
+  'INVALID_PASSWORD' = 'Password is invalid',
+  'TOO_MANY_ATTEMPTS_TRY_LATER' = 'Too many attempts, please try again later',
 }

@@ -18,4 +18,5 @@ export const ENV_CONFIG: EnvironmentConfig = {
   firebaseAdminCreds: JSON.parse(
     process.env.FIREBASE_ADMIN as unknown as string,
   ),
+  webApiToken: process.env.WEP_API_TOKEN!,
 };
