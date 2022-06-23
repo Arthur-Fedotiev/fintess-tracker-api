@@ -4,8 +4,13 @@
   "parserOptions": { "ecmaVersion": 2018, "sourceType": "module" },
   "rules": {
     "no-console": "warn",
-    "no-non-null-assertion": "off",
-    "eslint/no-empty-function": { "allow": ["private-constructors"] },
+    "no-empty-function": "off",
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      { "allow": ["private-constructors"] }
+    ],
     "object-property-newline": [
       "error",
       { "allowAllPropertiesOnSameLine": false }

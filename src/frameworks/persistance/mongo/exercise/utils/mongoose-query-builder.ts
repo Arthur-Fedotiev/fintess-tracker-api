@@ -28,6 +28,7 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     return this.requestQuery.limit;
   }
   private get rawQueryObj(): RequestQuery {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { select, sort, queryPage, queryLimit, ...reqQuery } =
       this.requestQuery;
 
@@ -62,7 +63,12 @@ export class MongooseQueryBuilder<ModelType, ResultType, DocType> {
     const next = await this.getNextPage();
     const prev = this.getPrevPage();
 
-    return prev || next ? { prev, next } : undefined;
+    return prev || next
+      ? {
+          prev,
+          next,
+        }
+      : undefined;
   }
 
   public setSelect(): MongooseQueryBuilder<ModelType, ResultType, DocType> {

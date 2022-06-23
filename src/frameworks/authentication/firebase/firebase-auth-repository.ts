@@ -24,7 +24,11 @@ export class FirebaseAuthRepository extends AuthRepository {
     try {
       const res = await axios.post<{ idToken: string }>(
         `${this.loginURL}${ENV_CONFIG.webApiToken}`,
-        { email, password, returnSecureToken: true },
+        {
+          email,
+          password,
+          returnSecureToken: true,
+        },
       );
 
       return res.data?.idToken ?? null;
