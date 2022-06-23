@@ -8,6 +8,7 @@ jobs:
     uses: ./.github/workflows/build_lint.yml
 
   deploy:
+  needs: build-and-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
