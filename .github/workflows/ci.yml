@@ -1,6 +1,7 @@
 name: CI - PR build & lint
 on:
-  push
+  push:
+    branches: ['**']
   pull_request:
     types: [opened, reopened]
 
