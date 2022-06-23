@@ -5,6 +5,7 @@ import hpp from 'hpp';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const xss = require('xss-clean');
 
 const limiter = {
