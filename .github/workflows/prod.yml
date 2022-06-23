@@ -5,9 +5,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: ./.github/workflows/build_lint.yml
 
       - name: Set up SSH
