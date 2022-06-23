@@ -15,7 +15,7 @@
     "start": "cross-env NODE_ENV=production node dist/server.js",
     "deploy": "pm2 deploy ecosystem.config.js production",
     "format:write": "prettier --write .",
-    "lint:check": "eslint .",
+    "lint:check": "eslint src/",
     "lint:fix": "eslint --fix ."
   },
   "husky": {

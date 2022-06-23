@@ -1,4 +1,4 @@
-name: CI - Master
+name: CD - Prod deployment
 on:
   push:
     branches: [master]
@@ -8,9 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      #
-      # ... other steps, such as running tests, etc...
-      #
+
+      - name: Build & lint
+        - uses: ./.github/workflows/build_lint.yml
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
@@ -22,19 +23,9 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-        # uses: MrSquaare/ssh-setup-action@v1
-        # with:
-        #   host: github.com
-        #   private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      # (optional - only needed if your config uses environment variables)
-      # - name: Create env file
-      #   run: |
-      #     touch .env
 
       - name: Install PM2
         run: yarn global add pm2
 
       - name: Deploy
         run: pm2 deploy ecosystem.config.js production
-        # Or alternately, put this deploy script in your package.json's scripts and run it using yarn/npm:
-        # run: yarn deploy
