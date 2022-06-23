@@ -4,9 +4,13 @@ on:
     branches: [master]
 
 jobs:
+  build-and-lint:
+    uses: ./.github/workflows/build_lint.yml
+
   deploy:
+    runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/build_lint.yml
+      - uses: actions/checkout@v3
 
       - name: Set up SSH
         run: |
