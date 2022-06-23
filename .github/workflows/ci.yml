@@ -1,0 +1,9 @@
+name: CI - PR build & lint
+on:
+  push
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  build-and-lint:
+    uses: ./.github/workflows/build_lint.yml

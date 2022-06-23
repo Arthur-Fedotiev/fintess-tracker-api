@@ -1,7 +1,5 @@
-name: CI - Dev build & lint
-on:
-  push:
-    branches: [dev]
+name: CI - build & lint
+on: workflow_call
 
 jobs:
   build:
