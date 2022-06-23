@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Build & lint
+        - uses: ./.github/workflows/build_lint.yml
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
