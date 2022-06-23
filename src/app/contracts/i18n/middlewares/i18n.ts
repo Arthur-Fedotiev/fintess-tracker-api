@@ -39,7 +39,10 @@ export const i18n = (
     .join(' ');
 
   Object.assign(req, {
-    query: { ...reqQuery, select: excludedLanguagesQuery },
+    query: {
+      ...reqQuery,
+      select: excludedLanguagesQuery,
+    },
   });
 
   AppLogger.info(req.query);
