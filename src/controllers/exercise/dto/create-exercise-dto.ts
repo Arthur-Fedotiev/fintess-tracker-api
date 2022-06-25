@@ -27,31 +27,31 @@ export class TranslatableDataDTO implements ExerciseTranslatableData {
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
-  @MaxLength(50)
+  @MaxLength(100)
   name!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @MaxLength(500)
+  @MaxLength(1500)
   shortDescription!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @MaxLength(1000)
+  @MaxLength(3000)
   longDescription!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @MaxLength(1000)
+  @MaxLength(3000)
   instructions!: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  @MaxLength(1000)
+  @MaxLength(3000)
   benefits!: string;
 }
 
