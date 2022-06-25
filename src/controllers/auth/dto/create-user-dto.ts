@@ -43,7 +43,7 @@ export class CreateUserDTO implements User {
 
   @IsOptional()
   @IsUrl()
-  @MaxLength(50)
+  @MaxLength(100)
   photoUrl?: string;
 
   @IsOptional()
