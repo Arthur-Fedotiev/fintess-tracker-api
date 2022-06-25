@@ -33,6 +33,45 @@ const parseData = (
   return JSON.parse(data);
 };
 
+const importExercises = async (exercises: {
+  [key: string]: {
+    baseData: ExerciseBase;
+    translatableData: ExerciseTranslatableData;
+  };
+}) => {
+  const mappedExercises = Object.keys(exercises).map((key) => ({
+    ...exercises[key].baseData,
+    translatableData: exercises[key].translatableData,
+  }));
+
+  const getTranslatedExercise = async (dto: Required<ExerciseRequestDTO>) => {
+    Object.keys(dto.translatableData).forEach(
+      (key) =>
+        dto.translatableData[
+          key as unknown as keyof ExerciseTranslatableData
+        ] === null &&
+        (dto.translatableData[
+          key as unknown as keyof ExerciseTranslatableData
+        ] = ''),
+    );
+
+    const translatedData = await translateService.translate(
+      dto.translatableData,
+    );
+
+    Object.assign(dto, translatedData, {
+      translatableData: undefined,
+    });
+
+    return dto;
+  };
+
+  const translatedExercises = await Promise.all(
+    mappedExercises.map(getTranslatedExercise),
+  );
+  await ExerciseModel.create(translatedExercises);
+};
+
 const deleteData = async () => {
   try {
     await ExerciseModel.deleteMany();
@@ -44,7 +83,6 @@ const deleteData = async () => {
   }
 };
 
-// Import into DB
 const importData = async () => {
   try {
     const data = await fs.readFile(
@@ -53,37 +91,7 @@ const importData = async () => {
     );
     const { exercises } = parseData(data);
 
-    const mappedExercises = Object.keys(exercises).map((key) => ({
-      ...exercises[key].baseData,
-      translatableData: exercises[key].translatableData,
-    }));
-
-    const getTranslatedExercise = async (dto: Required<ExerciseRequestDTO>) => {
-      Object.keys(dto.translatableData).forEach(
-        (key) =>
-          dto.translatableData[
-            key as unknown as keyof ExerciseTranslatableData
-          ] === null &&
-          (dto.translatableData[
-            key as unknown as keyof ExerciseTranslatableData
-          ] = ''),
-      );
-
-      const translatedData = await translateService.translate(
-        dto.translatableData,
-      );
-
-      Object.assign(dto, translatedData, {
-        translatableData: undefined,
-      });
-
-      return dto;
-    };
-
-    const translatedExercises = await Promise.all(
-      mappedExercises.map(getTranslatedExercise),
-    );
-    await ExerciseModel.create(translatedExercises);
+    await importExercises(exercises);
 
     console.log('Data Imported...');
     process.exit();
