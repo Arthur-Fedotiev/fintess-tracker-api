@@ -1,12 +1,10 @@
 import { Express } from 'express';
-import { ENV_CONFIG } from '../env-config';
+import { ENV_CONFIG } from './env-config';
 
-import 'reflect-metadata';
-
-import projectDependencies from '../dependencies/project-dependencies';
-import { closeServer } from './close-server';
-import { AppLogger } from '../frameworks/common/log/winston-logger';
-import { createApp } from './create-app';
+import projectDependencies from './dependencies/project-dependencies';
+import { closeServer } from './server/close-server';
+import { AppLogger } from './frameworks/common/log/winston-logger';
+import { createApp } from './server/create-app';
 
 const PORT = ENV_CONFIG.port;
 

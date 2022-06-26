@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { v2 } from '@google-cloud/translate';
 import { AdvancedResultsMongooseService } from '../frameworks/persistance/mongo/advanced-results-mongoose.service';
 import { ENV_CONFIG } from '../env-config';
