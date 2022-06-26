@@ -1,5 +1,5 @@
 import { Server } from 'http';
-import { AppLogger } from './frameworks/common/log/winston-logger';
+import { AppLogger } from '../frameworks/common/log/winston-logger';
 
 export const closeServer =
   (server: Server): ((err: Error) => void) =>

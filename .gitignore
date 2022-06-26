@@ -1,5 +1,5 @@
 node_modules/
 dist
-config/config.development.env
-config/config.production.env
+config/*
+!config/config.env.env
 deploy.env
