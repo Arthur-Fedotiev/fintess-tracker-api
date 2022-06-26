@@ -21,13 +21,8 @@
     "format:write": "prettier --write .",
     "lint:check": "eslint src/",
     "lint:fix": "eslint --fix .",
-    "test": "jest"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "pre-push": "yarn lint && yarn test"
-    }
+    "test": "jest",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -87,7 +82,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
-    "husky": "^7.0.4",
+    "husky": "^8.0.0",
     "jest": "^28.1.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
