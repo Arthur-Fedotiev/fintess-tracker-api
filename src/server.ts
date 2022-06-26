@@ -1,5 +1,4 @@
 import express from 'express';
-import { ENV_CONFIG } from './env-config';
 import { useLogger } from './app/shared/utils/use-logger';
 
 import 'reflect-metadata';
@@ -7,10 +6,11 @@ import 'reflect-metadata';
 import projectDependencies from './dependencies/project-dependencies';
 import { apiRouter } from './frameworks/web/routes';
 import { errorHandler } from './frameworks/common/error/error-handler';
-import { closeServer } from './close-server';
 import { AppLogger } from './frameworks/common/log/winston-logger';
 import { useSecure } from './frameworks/common/secure/use-secure';
 import path from 'path';
+import { closeServer } from './server/close-server';
+import { ENV_CONFIG } from './env-config';
 
 const app = express();
 const PORT = ENV_CONFIG.port;

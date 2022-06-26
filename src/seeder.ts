@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import appRoot from 'app-root-path';
 
 import { ExerciseModel } from './frameworks/persistance/mongo/exercise/models/Exercise';
-import { ENV_CONFIG } from './env-config';
 import {
   ExerciseBase,
   ExerciseRequestDTO,
@@ -11,6 +10,7 @@ import {
 } from './entities/exercise';
 import { v2 } from '@google-cloud/translate';
 import { GoogleTranslateService } from './frameworks/i18n/translate';
+import { ENV_CONFIG } from './env-config';
 
 mongoose.connect(ENV_CONFIG.mongoURI!);
 const translateService = new GoogleTranslateService(

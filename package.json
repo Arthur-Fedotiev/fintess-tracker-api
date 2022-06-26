@@ -7,7 +7,7 @@
     "build": "rimraf dist && tsc && yarn copy-files",
     "copy-files": "cp -R src/public/ dist/public",
     "preserve": "yarn build",
-    "serve": "DOTENV_CONFIG_PATH=config.development.env concurrently \"tsc --watch\" \"nodemon -q src/server.ts\"",
+    "serve": "cross-env DOTENV_CONFIG_PATH=config.development.env concurrently \"tsc --watch\" \"nodemon -q src/server.ts\"",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "format:check": "prettier --check .",
@@ -21,7 +21,7 @@
     "format:write": "prettier --write .",
     "lint:check": "eslint src/",
     "lint:fix": "eslint --fix .",
-    "test": "jest",
+    "test": "cross-env DOTENV_CONFIG_PATH=config.test.env jest",
     "prepare": "husky install"
   },
   "repository": {
