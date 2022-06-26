@@ -5,7 +5,12 @@ import { EnvironmentConfig } from './app/shared/models/environment/environment-c
 
 dotenv.config({
   debug: true,
-  path: path.resolve(__dirname, '../', 'config', 'config.env'),
+  path: path.resolve(
+    __dirname,
+    '../',
+    'config',
+    process.env.DOTENV_CONFIG_PATH as string,
+  ),
 });
 
 export const ENV_CONFIG: EnvironmentConfig = {
