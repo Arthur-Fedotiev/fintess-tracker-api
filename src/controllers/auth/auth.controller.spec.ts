@@ -24,6 +24,6 @@ describe('AuthController', () => {
   });
 
   it('should create controller', async () => {
-    expect(controller).toBeUndefined();
+    expect(controller).toBeTruthy();
   });
 });
