@@ -14,7 +14,9 @@ jobs:
           node-version: '16.x'
       - name: Install dependencies
         run: yarn --frozen-lockfile
-      - name: Build
-        run: yarn build
       - name: Lint
         run: yarn lint:check
+      - name: Test
+        run: yarn test
+      - name: Build
+        run: yarn build
