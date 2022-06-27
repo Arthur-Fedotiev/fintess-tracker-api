@@ -1,7 +1,10 @@
 # FitnessTracker Backend API Specifications
 
-Create the backend for a fitness-tracker website. The frontend/UI is created in separate project. It is cuurently using firebase and can be found at https://fitness-tracker-de06b.web.app/. This new API must completely mimic the firebase implementation, but implemented with Node.js, express, MongoDB, Mongoose tech stack.
-Application is hosted on https://fitness-tracker.live
+Create the backend for a fitness-tracker website. The frontend/UI is created in separate project. It is currently using firebase and can be found at https://fitness-tracker-de06b.web.app/. This new API must completely mimic the firebase implementation, though being implemented with Node.js, express, MongoDB, Mongoose tech stack.
+
+## MVP notes
+
+Backend-API MVP is hosted on https://fitness-tracker.live (you can try it out immediately simply from the browser https://fitness-tracker.live/exercises?lang=ukr,en or using [Postman](https://documenter.getpostman.com/view/11961976/UzBmMSbR) )
 
 ### Exercises (MVP - released)
 
@@ -28,8 +31,14 @@ Application is hosted on https://fitness-tracker.live
   - Must have the role "admin"
   - Delete all translations for exercise
 
+### Exercises quick search (Post MVP - to be done)
+
+- Algolia integration
+- Endpoint for exercises quick search by name
+
 ### ExercisesTranslations (MVP - released)
 
+- Implemented by Integration with Google Translate API
 - Possibility to select one of languages: ["en","ukr","bg","ru"]
 - Two possibilities to select language:
   - custom query: `?language=ukr,bg`
@@ -66,7 +75,7 @@ Authentication/Authorization should be implemented by integrating with existed F
 - Get user
   - Route to get the currently logged in user (via token)
 
-### \*_Post MVP Auth_:
+### \*_Post MVP Auth (to be done)_ :
 
 - Register as "admin"
 - User logout (\*post MVP)
@@ -92,6 +101,14 @@ Authentication/Authorization should be implemented by integrating with existed F
 - Add a rate limit for requests of 100 requests per 10 minutes
 - Protect against http param polution
 - Use cors to make API public (for now)
+
+## Code quality (MVP - released)
+
+- ESlint
+- Husky:
+  - pre-commit hook: lint
+  - pre-push hook: lint + test
+- Prettier
 
 ## Documentation (MVP - released)
 
