@@ -1,8 +1,9 @@
 # FitnessTracker Backend API Specifications
 
 Create the backend for a fitness-tracker website. The frontend/UI is created in separate project. It is cuurently using firebase and can be found at https://fitness-tracker-de06b.web.app/. This new API must completely mimic the firebase implementation, but implemented with Node.js, express, MongoDB, Mongoose tech stack.
+Application is hosted on https://fitness-tracker.live
 
-### Exercises
+### Exercises (MVP - released)
 
 - List all exercises in the database
   - Authenticated users only
@@ -13,37 +14,28 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
   - Filter by fields
 - Get single exercise
   - Authenticated users only
-  - by language (default=en)
+  - Select specific fields in result
+  - Select language
 - Create new exercise
   - Authenticated users only
-  - Must have the role "admin"
   - Field validation via Mongoose
   - create translations before saving to database
-- Upload a photo for exercise
-  - Authenticated users only
-  - Must have the role "admin"
-  - Photo will be uploaded to local filesystem
 - Update exercises
   - Authenticated users only
-  - Must have the role "admin"
   - Validation on update
 - Delete Exercise
   - Authenticated users only
   - Must have the role "admin"
   - Delete all translations for exercise
 
-### ExercisesTranslations
+### ExercisesTranslations (MVP - released)
 
-- Get translation for exercise
-- Create a translations
-  - Authenticated users only
-  - Must have the role "admin"
-- Update translation
-  - Admin only
-- Delete translation
-  - Admin only
+- Possibility to select one of languages: ["en","ukr","bg","ru"]
+- Two possibilities to select language:
+  - custom query: `?language=ukr,bg`
+  - `select` query: `select=ukr`, for specific fields `select=ukr.name, ukr.instructions`
 
-### Workouts
+### Workouts (Post MVP - to be done)
 
 - List all workouts
   - Authenticated users only
@@ -59,35 +51,39 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
   - Authenticated users only
   - Must have the role "admin"
 
-### Users & Authentication
+### Users & Authentication (MVP - released)
 
-- Authentication will be ton using JWT/cookies
-  - JWT and cookie should expire in 30 days
+Authentication/Authorization should be implemented by integrating with existed FirebaseAuth functionality.
+
+- Authentication will be done using JWT
 - User registration
-  - Register as a "user" or "admin"
-  - Once registered, a token will be sent along with a cookie (token = xxx)
-  - Passwords must be hashed
+  - Register as a "TRAINEE" or "admin"
+  - Once registered, a token will be sent
 - User login
   - User can login with email and password
   - Plain text password will compare with stored hashed password
   - Once logged in, a token will be sent along with a cookie (token = xxx)
-- User logout
-  - Cookie will be sent to set token = none
 - Get user
   - Route to get the currently logged in user (via token)
-- Password reset (lost password)
+
+### \*_Post MVP Auth_:
+
+- Register as "admin"
+- User logout (\*post MVP)
+  - Cookie will be sent to set token = none
+- Password reset (lost password) (\*post MVP)
   - User can request to reset password
   - A hashed token will be emailed to the users registered email address
   - A put request can be made to the generated url to reset password
   - The token will expire after 10 minutes
-- Update user info
+- Update user info (\*post MVP)
   - Authenticated user only
   - Separate route to update password
-- User CRUD
+- User CRUD (\*post MVP)
   - Admin only
-- Users can only be made admin by updating the database field manually
+- Users can be made by endpoint (\*post MVP)
 
-## Security
+## Security (MVP - released)
 
 - Encrypt passwords and reset tokens
 - Prevent NoSQL injections
@@ -97,13 +93,13 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
 - Protect against http param polution
 - Use cors to make API public (for now)
 
-## Documentation
+## Documentation (MVP - released)
 
 - Use Postman to create documentation
 - Use docgen to create HTML files from Postman
 - Add html files as the / route for the api
 
-## Deployment (Digital Ocean)
+## Deployment (Digital Ocean) (MVP - released)
 
 - Push to Github
 - Create a droplet - https://m.do.co/c/5424d440c63a
@@ -114,13 +110,10 @@ Create the backend for a fitness-tracker website. The frontend/UI is created in 
 - Connect a domain name
 - Install an SSL using Let's Encrypt
 
-## Code Related Suggestions
+## CI/CD (MVP - released)
 
-- NPM scripts for dev and production env
-- Config file for important constants
-- Use controller methods with documented descriptions/routes
-- Error handling middleware
-- Authentication middleware for protecting routes and setting user roles
-- Validation using Mongoose and no external libraries
-- Use async/await (create middleware to clean up controller methods)
-- Create a database seeder to import and destroy data
+- CI pipeline for Pull requests: lint, test, build
+- CD pipeline consist of 2 consequent jobs:
+  - lint, test, build
+  - deploy
+- CI/CD implemented by use of Github Actions with Secrets
